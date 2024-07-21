@@ -2,7 +2,7 @@ services:
   saboga-frontend:
     build:
       context: ../
-      dockerfile: ./frontend-testing/Dockerfile
+      dockerfile: ./Dockerfile
     image: saboga-frontend:latest
     container_name: saboga-frontend
     labels:
