@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import Root from './routes/root.tsx'
+import Browse from "./routes/browse.tsx";
 import './index.css'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./routes/404.tsx";
@@ -16,8 +16,13 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
         children: [
             {
-                path: "/",
-                element: <Root />,
+                path: "/browse/boardgame/",
+                element: <Browse />,
+                loader: boardgameListLoader
+            },
+            {
+                path: "/browse/boardgame/page/:pageId",
+                element: <Browse />,
                 loader: boardgameListLoader
             },
             {

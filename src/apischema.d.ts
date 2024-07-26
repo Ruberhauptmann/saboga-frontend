@@ -21,7 +21,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/boardgames/{game_id}": {
+    "/boardgames/{bgg_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -29,7 +29,7 @@ export interface paths {
             cookie?: never;
         };
         /** Read Game */
-        get: operations["read_game_boardgames__game_id__get"];
+        get: operations["read_game_boardgames__bgg_id__get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -49,11 +49,17 @@ export interface components {
             /** Name */
             name: string;
             /** Bgg Rank */
-            bgg_rank: number | null;
+            bgg_rank: number;
+            /** Bgg Rank Change */
+            bgg_rank_change: number;
             /** Bgg Geek Rating */
-            bgg_geek_rating: number | null;
+            bgg_geek_rating: number;
+            /** Bgg Geek Rating Change */
+            bgg_geek_rating_change: number;
             /** Bgg Average Rating */
-            bgg_average_rating: number | null;
+            bgg_average_rating: number;
+            /** Bgg Average Rating Change */
+            bgg_average_rating_change: number;
             /** Bgg Rank History */
             bgg_rank_history: components["schemas"]["RankHistory"][];
             /**
@@ -108,6 +114,7 @@ export interface operations {
     read_all_games_boardgames__get: {
         parameters: {
             query?: {
+                date?: string;
                 page?: number;
                 per_page?: number;
             };
@@ -144,12 +151,12 @@ export interface operations {
             };
         };
     };
-    read_game_boardgames__game_id__get: {
+    read_game_boardgames__bgg_id__get: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                game_id: string;
+                bgg_id: number;
             };
             cookie?: never;
         };

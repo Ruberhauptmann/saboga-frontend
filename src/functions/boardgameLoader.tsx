@@ -2,9 +2,9 @@ import client from "../client/fetchclient.tsx";
 import type { Params } from "react-router-dom";
 
 export const boardgameLoader = async ({ params }: { params: Params<"boardgameId"> }) => {
-    const {data, error} = await client.GET("/boardgames/{game_id}", {
+    const {data, error} = await client.GET("/boardgames/{bgg_id}", {
         params: {
-            path: { game_id: params.boardgameId! },
+            path: { bgg_id: Number(params.boardgameId!) },
         },
     });
 
