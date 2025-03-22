@@ -3,7 +3,6 @@ services:
     build:
       context: ../
       dockerfile: ./Dockerfile
-    image: saboga-frontend:latest
     container_name: saboga-frontend
     labels:
       - "traefik.http.routers.saboga-frontend.rule=Host(`saboga.localhost`)"
@@ -11,12 +10,12 @@ services:
     expose:
       - "4173"
     networks:
-      - reverse-proxy
+      - saboga-reverse-proxy
       - saboga-api
 
 networks:
-  reverse-proxy:
-    name: api-testing_reverse-proxy
+  saboga-reverse-proxy:
+    name: saboga-reverse-proxy
     external: true
   saboga-api:
     name: api-testing_saboga-api

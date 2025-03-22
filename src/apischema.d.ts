@@ -11,7 +11,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Read All Games */
+        /**
+         * Read All Games
+         * @description Returns a list of boardgames from the database, sorted by rank.
+         */
         get: operations["read_all_games_boardgames__get"];
         put?: never;
         post?: never;
@@ -28,7 +31,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Read Game */
+        /**
+         * Read Game
+         * @description Returns a single board game from the database.
+         */
         get: operations["read_game_boardgames__bgg_id__get"];
         put?: never;
         post?: never;
@@ -42,31 +48,51 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        /** BoardgamePublic */
-        BoardgamePublic: {
+        /** BoardgameComparison */
+        BoardgameComparison: {
             /** Bgg Id */
             bgg_id: number;
             /** Name */
             name: string;
+            /** Description */
+            description: string | null;
+            /** Image Url */
+            image_url: string | null;
+            /** Thumbnail Url */
+            thumbnail_url: string | null;
             /** Bgg Rank */
             bgg_rank: number;
-            /** Bgg Rank Change */
-            bgg_rank_change: number;
             /** Bgg Geek Rating */
             bgg_geek_rating: number;
-            /** Bgg Geek Rating Change */
-            bgg_geek_rating_change: number;
             /** Bgg Average Rating */
             bgg_average_rating: number;
+            /** Bgg Rank Change */
+            bgg_rank_change: number;
+            /** Bgg Geek Rating Change */
+            bgg_geek_rating_change: number;
             /** Bgg Average Rating Change */
             bgg_average_rating_change: number;
+        };
+        /** BoardgameWithHistoricalData */
+        BoardgameWithHistoricalData: {
+            /** Bgg Id */
+            bgg_id: number;
+            /** Name */
+            name: string;
+            /** Description */
+            description: string | null;
+            /** Image Url */
+            image_url: string | null;
+            /** Thumbnail Url */
+            thumbnail_url: string | null;
+            /** Bgg Rank */
+            bgg_rank: number;
+            /** Bgg Geek Rating */
+            bgg_geek_rating: number;
+            /** Bgg Average Rating */
+            bgg_average_rating: number;
             /** Bgg Rank History */
             bgg_rank_history: components["schemas"]["RankHistory"][];
-            /**
-             * Id
-             * @example 5eb7cf5a86d9755df3a6c593
-             */
-            id: string;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -82,16 +108,10 @@ export interface components {
             date: string;
             /** Bgg Rank */
             bgg_rank: number | null;
-            /** Bgg Rank Change */
-            bgg_rank_change: number | null;
             /** Bgg Geek Rating */
             bgg_geek_rating: number | null;
-            /** Bgg Geek Rating Change */
-            bgg_geek_rating_change: number | null;
             /** Bgg Average Rating */
             bgg_average_rating: number | null;
-            /** Bgg Average Rating Change */
-            bgg_average_rating_change: number | null;
         };
         /** ValidationError */
         ValidationError: {
@@ -114,7 +134,8 @@ export interface operations {
     read_all_games_boardgames__get: {
         parameters: {
             query?: {
-                date?: string;
+                date?: string | null;
+                compare_to?: string | null;
                 page?: number;
                 per_page?: number;
             };
@@ -130,7 +151,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BoardgamePublic"][];
+                    "application/json": components["schemas"]["BoardgameComparison"][];
                 };
             };
             /** @description Not found */
@@ -153,7 +174,11 @@ export interface operations {
     };
     read_game_boardgames__bgg_id__get: {
         parameters: {
-            query?: never;
+            query?: {
+                start_date?: string | null;
+                end_date?: string | null;
+                mode?: string;
+            };
             header?: never;
             path: {
                 bgg_id: number;
@@ -168,7 +193,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BoardgamePublic"];
+                    "application/json": components["schemas"]["BoardgameWithHistoricalData"];
                 };
             };
             /** @description Not found */
