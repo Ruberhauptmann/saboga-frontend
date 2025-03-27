@@ -2,13 +2,18 @@ services:
   saboga-frontend:
     build:
       context: ../
-      dockerfile: ./Dockerfile
-    container_name: saboga-frontend
+      dockerfile: ./dev.Dockerfile
+    container_name : saboga-frontend
+    develop:
+      watch:
+        - action: sync
+          path: ../
+          target: /app
     labels:
       - "traefik.http.routers.saboga-frontend.rule=Host(`saboga.localhost`)"
       - "traefik.http.routers.saboga-frontend.tls=true"
     expose:
-      - "4173"
+      - "5173"
     networks:
       - saboga-reverse-proxy
       - saboga-api

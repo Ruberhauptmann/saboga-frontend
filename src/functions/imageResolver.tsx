@@ -1,5 +1,5 @@
 // Function to get the full image URL
-import {apiBaseUrl} from "../client/fetchclient.tsx";
+import {apiBaseUrl} from "./apiService.tsx";
 
 const defaultImage = "/img/placeholder.jpg";
 

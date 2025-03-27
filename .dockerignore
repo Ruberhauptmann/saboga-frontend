@@ -1,7 +1,7 @@
 saboga-frontend-old/Dockerfile
 .dockerignore
 .git
-.gitignore
+../.gitignore
 .gitattributes
 svelte/README.md
 svelte/.npmrc

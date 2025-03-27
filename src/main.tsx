@@ -6,8 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./routes/404.tsx";
 import Boardgame from "./routes/boardgame.tsx";
 import BaseLayout from "./layouts/base.tsx";
-import {boardgameLoader} from "./functions/boardgameLoader.tsx";
-import {boardgameListLoader} from "./functions/boardgameListLoader.tsx";
+import { boardgameListLoader, boardgameLoader } from "./functions/apiService.tsx";
 
 const router = createBrowserRouter([
     {
@@ -35,7 +34,7 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-      <RouterProvider router={router} />
-  </React.StrictMode>,
+    <React.StrictMode>
+        <RouterProvider router={router} />
+    </React.StrictMode>,
 )
