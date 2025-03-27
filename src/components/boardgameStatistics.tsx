@@ -8,10 +8,16 @@ import {
     LineElement,
     PointElement,
     Title,
-    Tooltip
+    Tooltip,
+    TimeScale,
+    ChartDataset, ChartData
 } from "chart.js";
+import annotationPlugin from 'chartjs-plugin-annotation';
+import 'chartjs-adapter-date-fns';
+import {forecastLoader} from "../functions/apiService.tsx";
 
 type Boardgame = components["schemas"]["BoardgameWithHistoricalData"];
+type Prediction = components["schemas"]["Prediction"];
 
 ChartJS.register(
     CategoryScale,
@@ -20,67 +26,123 @@ ChartJS.register(
     LineElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    annotationPlugin,
+    TimeScale,
 );
-import daisyuiColors from 'daisyui/src/theming/themes'
-// secondary color of light theme (#f000b8):
+import {useEffect, useState} from "react";
+import {getColors} from "../functions/getColors.tsx";
 
-function BoardgameStatistics(boardgame: Boardgame) {
-    const labels = boardgame.bgg_rank_history.map(entry =>
-        new Date(entry.date).toLocaleDateString("en-US") // Convert to readable format
-    );
+function BoardgameStatistics({ boardgame, loadPrediction }: { boardgame: Boardgame; loadPrediction: boolean }) {
+    const labels = boardgame.bgg_rank_history.map(entry => new Date(entry.date));
     const bggRankData = boardgame.bgg_rank_history.map(entry => entry.bgg_rank);
     const bggGeekRatingData = boardgame.bgg_rank_history.map(entry => entry.bgg_geek_rating);
     const bggAverageRatingData = boardgame.bgg_rank_history.map(entry => entry.bgg_average_rating);
 
-    console.log(
-        daisyuiColors['cupcake'].secondary
-    )
+    const last_date = labels[labels.length-1]
 
-    const rank_data = {
-        labels,
-        datasets: [
-            {
-                label: "BGG Rank",
-                data: bggRankData,
-                borderColor: daisyuiColors['cupcake'].secondary,
-                backgroundColor: daisyuiColors['cupcake'].secondary,
-                fill: true
-            },
-        ]
+    const colors = getColors();
+
+    const [predictionData, setPredictionData] = useState<Prediction[]>([]);
+
+    const fetchPrediction = async () => {
+        try {
+            const data = await forecastLoader({ params: { boardgameId: boardgame.bgg_id.toString() } });
+            if (!data) {
+                console.error('Invalid prediction data');
+                setPredictionData([]);
+            } else {
+                setPredictionData(data.prediction);
+            }
+        } catch (err) {
+            console.error(err);
+        }
     };
 
-    const rating_data = {
-        labels,
+    // Effect triggers when `loadPrediction` changes
+    useEffect(() => {
+        if (loadPrediction) {
+            fetchPrediction();
+        }
+    }, [loadPrediction]);
+
+    const rankDataSets: ChartDataset<"line">[] = [
+        {
+            label: "BGG Rank",
+            data: bggRankData,
+            borderColor: colors.secondary,
+            backgroundColor: colors.secondary,
+            tension: 0.1,
+        },
+    ];
+
+    let predictedRankData: (null | number)[] = [];
+    let predictedAverageRatingData: number[] = [];
+    let predictedGeekRatingData: number[] = [];
+    let predictedLabels: Date[] = [];
+    if (loadPrediction) {
+        predictedRankData = [...bggRankData.map(() => null), ...predictionData.map(entry => entry.bgg_rank)];
+        rankDataSets.push(
+            {
+                label: "BGG Rank (predicted)",
+                data: predictedRankData,
+                borderColor: colors.primary,
+                backgroundColor: colors.primary,
+                tension: 0.1,
+            },
+        )
+
+        predictedAverageRatingData = predictionData.map(entry => entry.bgg_average_rating);
+        predictedGeekRatingData = predictionData.map(entry => entry.bgg_geek_rating);
+        predictedLabels = predictionData.map(entry => new Date(entry.date));
+    }
+    const fullLabels = [...labels, ...predictedLabels];
+    const fullAverageRatingData = [...bggAverageRatingData, ...predictedAverageRatingData];
+    const fullGeekRatingData = [...bggGeekRatingData, ...predictedGeekRatingData];
+
+    const rankData: ChartData<"line"> = {
+        labels: fullLabels,
+        datasets: rankDataSets
+    };
+
+    const ratingData = {
+        labels: fullLabels,
         datasets: [
             {
                 label: "BGG Geek Rating",
-                data: bggGeekRatingData,
-                borderColor: daisyuiColors['cupcake'].primary ,
-                backgroundColor: daisyuiColors['cupcake'].primary,
+                data: fullGeekRatingData,
+                borderColor: colors.primary ,
+                backgroundColor: colors.primary,
                 yAxisID: 'y1',
-                fill: true
+                tension: 0.1
             },
             {
                 label: "BGG Average Rating",
-                data: bggAverageRatingData,
-                borderColor: daisyuiColors['cupcake'].secondary,
-                backgroundColor: daisyuiColors['cupcake'].secondary,
+                data: fullAverageRatingData,
+                borderColor: colors.secondary,
+                backgroundColor: colors.secondary,
                 yAxisID: 'y2',
-                fill: true
+                tension: 0.1
             }
         ]
     };
 
-    const rank_options = {
+    const rank_options= {
         responsive: true,
         maintainAspectRatio: false,
+        type: 'line',
         scales: {
             x: {
+                type: 'time' as const,
+                time: {
+                    unit: 'day' as const
+                },
                 title: {
                     display: true,
                     text: "Date"
-                }
+                },
+                // min: new Date("2025-02-20").toISOString(), // Start date for x-axis
+                // max: new Date("2025-03-30").toISOString(), // End date for x-axis
             },
             y: {
                 type: 'linear' as const,
@@ -94,6 +156,20 @@ function BoardgameStatistics(boardgame: Boardgame) {
                 beginAtZero: false,
                 reverse: true
             }
+        },
+        plugins: {
+            annotation: {
+                annotations: {
+                    line1: {
+                        type: 'line' as const,
+                        xMin: last_date.toISOString(),
+                        xMax: last_date.toISOString(),
+                        borderColor: 'rgb(255, 99, 132)',
+                        borderWidth: 2,
+                        display: loadPrediction
+                    }
+                }
+            }
         }
     };
 
@@ -102,6 +178,7 @@ function BoardgameStatistics(boardgame: Boardgame) {
         maintainAspectRatio: false,
         scales: {
             x: {
+                type: 'time' as const,
                 title: {
                     display: true,
                     text: "Date"
@@ -123,19 +200,19 @@ function BoardgameStatistics(boardgame: Boardgame) {
                     text: "Average Rating"
                 },
                 grid: {
-                    drawOnChartArea: false  // Don't draw grid lines for the second Y-axis
+                    drawOnChartArea: false
                 }
             }
         }
     };
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
             <div className="relative h-96">
-                <Line options={rank_options} data={rank_data}/>
+                <Line options={rank_options} data={rankData}/>
             </div>
             <div className="relative h-96">
-                <Line options={rating_options} data={rating_data}/>
+                <Line options={rating_options} data={ratingData}/>
             </div>
         </div>
     );

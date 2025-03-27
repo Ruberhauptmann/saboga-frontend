@@ -21,20 +21,34 @@ function BoardgameRow(boardgame: BoardgameComparison) {
 
     return (
         <tr key={boardgame.bgg_id}>
-            <td>
+            <td className="max-w-10">
+                <a href={"https://boardgamegeek.com/boardgame/" + boardgame.bgg_id}
+                   target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="38" viewBox="0 0 80 38">
+                        <g fill="none" fillRule="evenodd">
+                            <polygon fill="#FF5100"
+                                     points="24.87 7.01 21.107 8.035 24.792 0 .9 8.794 2.206 19.327 0 21.454 6.577 37.93 20.558 32.779 25.418 21.37 23.331 19.358"/>
+                        </g>
+                    </svg>
+                </a>
+            </td>
+            <td className="max-w-10">
                 {boardgame.bgg_rank} {bgg_rank_change}
             </td>
             <td>
-                <div className="flex items-center gap-3">
+                <div className="flex justify-center">
+                    <Link className="block md:h-20 md:w-20 h-12 w-12" to={`/boardgame/${boardgame.bgg_id}`}>
                     <div className="avatar">
-                        <div className="mask mask-squircle h-12 w-12">
-                            <img className="object-cover" src={imageResolver(boardgame.thumbnail_url)} alt="Boardgame cover"/>
+                            <div className="mask mask-squircle">
+                                <img className="object-cover" src={imageResolver(boardgame.thumbnail_url)}
+                                     alt="Boardgame cover"/>
+                            </div>
                         </div>
-                    </div>
+                    </Link>
                 </div>
             </td>
             <td>
-                <Link to={`/boardgame/${boardgame.bgg_id}`}>{boardgame.name}</Link>
+                <Link to={`/boardgame/${boardgame.bgg_id}`}>{boardgame.name} ({boardgame.year_published})</Link>
             </td>
             <td>
                 {boardgame.bgg_geek_rating?.toFixed(3).toString()} {bgg_geek_rating_change}
@@ -47,7 +61,10 @@ function BoardgameRow(boardgame: BoardgameComparison) {
 }
 
 
-function BoardgameTable({ boardgames, links }: {boardgames: BoardgameComparison[], links: Map<string,Map<string, string>> }) {
+function BoardgameTable({boardgames, links}: {
+    boardgames: BoardgameComparison[],
+    links: Map<string, Map<string, string>>
+}) {
     return (
         <div className="max-w-full overflow-x-auto">
             <div className="flex justify-end">
@@ -61,13 +78,14 @@ function BoardgameTable({ boardgames, links }: {boardgames: BoardgameComparison[
                          to={`/browse/boardgame/page/${links.get('last')?.get('page')}`}>{links.get('last')?.get('page')}</NavLink>
             </div>
             <div className="max-h-screen overflow-y-auto">
-                <table className="table table-zebra table-pin-rows w-full">
+                <table className="table md:table-md table-xs table-zebra table-pin-rows w-full">
                     <thead>
                     <tr>
+                        <th></th>
                         <th>Rank</th>
                         <th></th>
                         <th>Title</th>
-                        <th>Geek Rating</th>
+                        <th className="max-w-10 break-all">Geek Rating</th>
                         <th>Average Rating</th>
                     </tr>
                     </thead>
