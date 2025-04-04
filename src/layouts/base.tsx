@@ -1,6 +1,11 @@
 import { Link, NavLink, Outlet, ScrollRestoration } from "react-router-dom";
+import {ReactNode} from "react";
 
-export default function BaseLayout() {
+type BaseLayoutProps = {
+    children?: ReactNode;
+};
+
+export default function BaseLayout({ children }: BaseLayoutProps) {
     return (
         <div>
             <div>
@@ -24,7 +29,7 @@ export default function BaseLayout() {
 
                 {/* Page Content */}
                 <main className="pt-8 pb-8 px-4 max-w-full flex-grow">
-                    <Outlet/>
+                    {children ? children : <Outlet />}
                 </main>
 
                 {/* Footer */}

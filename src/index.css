@@ -1,4 +1,10 @@
 @import "tailwindcss";
+@source "../node_modules/react-tailwindcss-datepicker/dist/index.esm.js";
 @plugin "daisyui" {
     themes: light --default, dark --prefersdark, autumn;
+}
+
+.opacity-1 {
+    /* https://github.com/onesine/react-tailwindcss-datepicker/pull/307 */
+    @apply opacity-100;
 }

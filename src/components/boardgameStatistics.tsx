@@ -39,7 +39,7 @@ function BoardgameStatistics({ boardgame, loadPrediction }: { boardgame: Boardga
     const bggGeekRatingData = boardgame.bgg_rank_history.map(entry => entry.bgg_geek_rating);
     const bggAverageRatingData = boardgame.bgg_rank_history.map(entry => entry.bgg_average_rating);
 
-    const last_date = labels[labels.length-1]
+    const last_date = labels[labels.length-1] ? labels[labels.length-1] : new Date();
 
     const colors = getColors();
 
@@ -141,8 +141,6 @@ function BoardgameStatistics({ boardgame, loadPrediction }: { boardgame: Boardga
                     display: true,
                     text: "Date"
                 },
-                // min: new Date("2025-02-20").toISOString(), // Start date for x-axis
-                // max: new Date("2025-03-30").toISOString(), // End date for x-axis
             },
             y: {
                 type: 'linear' as const,

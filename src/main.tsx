@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import Browse from "./routes/browse.tsx";
 import './index.css'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import ErrorPage from "./routes/404.tsx";
+import ErrorPage from "./routes/errors.tsx";
 import Boardgame from "./routes/boardgame.tsx";
 import BaseLayout from "./layouts/base.tsx";
 import { boardgameListLoader, boardgameLoader } from "./functions/apiService.tsx";
@@ -12,7 +12,11 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <BaseLayout />,
-        errorElement: <ErrorPage />,
+        errorElement: (
+            <BaseLayout>
+                <ErrorPage/>
+            </BaseLayout>
+        ),
         children: [
             {
                 path: "/browse/boardgame/",

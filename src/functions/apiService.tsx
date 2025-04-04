@@ -13,7 +13,6 @@ const client = createClient<paths>({
 export const boardgameListLoader = async ({ request, params }: { request: Request, params: Params<"pageId"> }) => {
     const url = new URL(request.url);
     const compare_to = url.searchParams.get("startDate");
-    const date = url.searchParams.get("endDate");
 
     const queryParams: Record<string, string | number> = { };
     if (params.pageId) {
@@ -21,9 +20,6 @@ export const boardgameListLoader = async ({ request, params }: { request: Reques
     }
     if (compare_to) {
         queryParams.compare_to = compare_to;
-    }
-    if (date) {
-        queryParams.date = date;
     }
 
     const {data, error, response} = await client.GET(
@@ -33,42 +29,43 @@ export const boardgameListLoader = async ({ request, params }: { request: Reques
             }
         }
     );
-
-    const links = parseLinkHeader(response.headers.get('link')!);
-
     if (error) {
-        console.error('Error', error);
-        return [];
+        const status = response?.status || 500;
+        const statusText = response?.statusText || "Unknown error";
+        throw new Response(statusText, { status });
     }
 
+    const links = parseLinkHeader(response.headers.get('link')!);
 
     return {data, links};
 };
 
 export const boardgameLoader = async ({ params }: { params: Params<"boardgameId"> }) => {
-    const {data, error} = await client.GET("/boardgames/{bgg_id}", {
+    const {data, error, response} = await client.GET("/boardgames/{bgg_id}", {
         params: {
             path: { bgg_id: Number(params.boardgameId!) },
         },
     });
-
     if (error) {
-        console.error('Error', error);
-        return [];
+        const status = response.status || 500;
+        const errorMessage = error.detail || "Unknown error";
+
+        throw new Response(errorMessage, { status });
     }
+
     return data;
 };
 
 export const forecastLoader = async ({ params }: { params: Params<"boardgameId"> }) => {
-    const {data, error} = await client.GET("/boardgames/{bgg_id}/forecast", {
+    const {data, error, response} = await client.GET("/boardgames/{bgg_id}/forecast", {
         params: {
             path: { bgg_id: Number(params.boardgameId!) },
         },
     });
-
     if (error) {
-        console.error('Error', error);
-        return data;
+        const status = response?.status || 500;
+        const statusText = response?.statusText || "Unknown error";
+        throw new Response(statusText, { status });
     }
     return data;
 };
