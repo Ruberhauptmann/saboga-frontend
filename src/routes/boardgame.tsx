@@ -2,17 +2,13 @@ import type {components} from "../apischema";
 import {useLoaderData, useNavigation} from "react-router-dom";
 import BoardgameStatistics from "../components/boardgameStatistics"
 import imageResolver from "../functions/imageResolver.tsx";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 
 type BoardgameWithHistoricalData = components["schemas"]["BoardgameWithHistoricalData"];
 
 function Boardgame() {
     const boardgame = useLoaderData() as BoardgameWithHistoricalData;
     const navigation = useNavigation();
-
-    useEffect(() => {
-        document.title = boardgame.name;
-    }, [boardgame.name]);
 
     const [loadPrediction, setLoadPrediction] = useState(false);
 
@@ -26,12 +22,15 @@ function Boardgame() {
 
     return (
         <div>
+            <title>{boardgame.name}</title>
+
             <div className="flex flex-wrap md:flex-nowrap">
                 <div className="basis-1/3 flex-shrink-0">
                     <img className="max-w-64 pl-4 object-contain" src={imageResolver(boardgame.image_url)}
                          alt="Boardgame cover"/>
 
-                    <button onClick={handleLoadPrediction}>Load Prediction</button>
+                    <button className="btn btn-primary" onClick={handleLoadPrediction}>Load Prediction</button>
+
                     <BoardgameStatistics boardgame={boardgame} loadPrediction={loadPrediction}/>
                 </div>
 

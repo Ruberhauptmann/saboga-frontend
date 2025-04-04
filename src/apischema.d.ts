@@ -393,85 +393,112 @@ export interface components {
             /** Bgg Id */
             bgg_id: number;
             /** Name */
-            name: string;
+            name?: string | null;
             /** Description */
-            description: string | null;
+            description?: string | null;
             /** Image Url */
-            image_url: string | null;
+            image_url?: string | null;
             /** Thumbnail Url */
-            thumbnail_url: string | null;
+            thumbnail_url?: string | null;
             /** Year Published */
-            year_published: number | null;
+            year_published?: number | null;
             /** Minplayers */
-            minplayers: number | null;
+            minplayers?: number | null;
             /** Maxplayers */
-            maxplayers: number | null;
+            maxplayers?: number | null;
             /** Playingtime */
-            playingtime: number | null;
+            playingtime?: number | null;
             /** Minplaytime */
-            minplaytime: number | null;
+            minplaytime?: number | null;
             /** Maxplaytime */
-            maxplaytime: number | null;
-            /** Categories */
+            maxplaytime?: number | null;
+            /**
+             * Categories
+             * @default []
+             */
             categories: components["schemas"]["Category"][];
-            /** Families */
+            /**
+             * Families
+             * @default []
+             */
             families: components["schemas"]["Family"][];
-            /** Designers */
+            /**
+             * Designers
+             * @default []
+             */
             designers: components["schemas"]["Person"][];
-            /** Mechanics */
+            /**
+             * Mechanics
+             * @default []
+             */
             mechanics: components["schemas"]["Mechanic"][];
             /** Bgg Rank */
             bgg_rank: number;
             /** Bgg Geek Rating */
-            bgg_geek_rating: number;
+            bgg_geek_rating?: number | null;
             /** Bgg Average Rating */
-            bgg_average_rating: number;
+            bgg_average_rating?: number | null;
             /** Bgg Rank Change */
-            bgg_rank_change: number;
+            bgg_rank_change?: number | null;
             /** Bgg Geek Rating Change */
-            bgg_geek_rating_change: number;
+            bgg_geek_rating_change?: number | null;
             /** Bgg Average Rating Change */
-            bgg_average_rating_change: number;
+            bgg_average_rating_change?: number | null;
         };
         /** BoardgameWithHistoricalData */
         BoardgameWithHistoricalData: {
             /** Bgg Id */
             bgg_id: number;
             /** Name */
-            name: string;
+            name?: string | null;
             /** Description */
-            description: string | null;
+            description?: string | null;
             /** Image Url */
-            image_url: string | null;
+            image_url?: string | null;
             /** Thumbnail Url */
-            thumbnail_url: string | null;
+            thumbnail_url?: string | null;
             /** Year Published */
-            year_published: number | null;
+            year_published?: number | null;
             /** Minplayers */
-            minplayers: number | null;
+            minplayers?: number | null;
             /** Maxplayers */
-            maxplayers: number | null;
+            maxplayers?: number | null;
             /** Playingtime */
-            playingtime: number | null;
+            playingtime?: number | null;
             /** Minplaytime */
-            minplaytime: number | null;
+            minplaytime?: number | null;
             /** Maxplaytime */
-            maxplaytime: number | null;
-            /** Categories */
+            maxplaytime?: number | null;
+            /**
+             * Categories
+             * @default []
+             */
             categories: components["schemas"]["Category"][];
-            /** Families */
+            /**
+             * Families
+             * @default []
+             */
             families: components["schemas"]["Family"][];
-            /** Designers */
+            /**
+             * Designers
+             * @default []
+             */
             designers: components["schemas"]["Person"][];
-            /** Mechanics */
+            /**
+             * Mechanics
+             * @default []
+             */
             mechanics: components["schemas"]["Mechanic"][];
             /** Bgg Rank */
             bgg_rank: number;
             /** Bgg Geek Rating */
-            bgg_geek_rating: number;
+            bgg_geek_rating?: number | null;
             /** Bgg Average Rating */
-            bgg_average_rating: number;
-            /** Bgg Rank History */
+            bgg_average_rating?: number | null;
+            /**
+             * Bgg Rank History
+             * @default []
+             */
             bgg_rank_history: components["schemas"]["RankHistory"][];
         };
         /** Body_create_upload_file_boardgames_uploadfile_post */
@@ -505,10 +532,14 @@ export interface components {
             /** Prediction */
             prediction: components["schemas"]["Prediction"][];
         };
-        /** HTTPValidationError */
+        /** ErrorResponse */
         HTTPValidationError: {
             /** Detail */
-            detail?: components["schemas"]["ValidationError"][];
+            detail: string;
+            /** Status Code */
+            status_code: number;
+            /** Extra Info */
+            extra_info?: Record<string, never> | null;
         };
         /** Mechanic */
         Mechanic: {
@@ -622,7 +653,6 @@ export interface operations {
     read_games_with_rank_changes_boardgames_rank_history_get: {
         parameters: {
             query?: {
-                date?: string | null;
                 compare_to?: string | null;
                 page?: number;
                 per_page?: number;
