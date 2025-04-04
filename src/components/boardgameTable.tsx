@@ -7,15 +7,15 @@ type BoardgameComparison = components["schemas"]["BoardgameComparison"];
 
 function BoardgameRow(boardgame: BoardgameComparison) {
     let bgg_rank_change = <span></span>;
-    if (boardgame.bgg_rank_change !== null && boardgame.bgg_rank_change != 0 ) {
+    if (boardgame.bgg_rank_change !== undefined && boardgame.bgg_rank_change !== null && boardgame.bgg_rank_change != 0 ) {
         bgg_rank_change = <span>(<span className={boardgame.bgg_rank_change < 0 ? "text-error" : "text-success"}>{boardgame.bgg_rank_change < 0 ? "" : "+"}{(boardgame.bgg_rank_change).toString()}</span>)</span>;
     }
     let bgg_geek_rating_change = <span></span>;
-    if (boardgame.bgg_geek_rating_change !== null && Number(boardgame.bgg_geek_rating_change.toFixed(3)) != 0) {
+    if (boardgame.bgg_geek_rating_change !== undefined && boardgame.bgg_geek_rating_change !== null && Number(boardgame.bgg_geek_rating_change.toFixed(3)) != 0) {
         bgg_geek_rating_change = <span>(<span className={boardgame.bgg_geek_rating_change < 0 ? "text-error" : "text-success"}>{boardgame.bgg_geek_rating_change < 0 ? "" : "+"}{boardgame.bgg_geek_rating_change.toFixed(3)}</span>)</span>;
     }
     let bgg_average_rating_change = <span></span>;
-    if (boardgame.bgg_average_rating_change !== null && Number(boardgame.bgg_average_rating_change.toFixed(2)) != 0) {
+    if (boardgame.bgg_average_rating_change !== undefined && boardgame.bgg_average_rating_change !== null && Number(boardgame.bgg_average_rating_change.toFixed(2)) != 0) {
         bgg_average_rating_change = <span>(<span className={boardgame.bgg_average_rating_change < 0 ? "text-error" : "text-success"}>{boardgame.bgg_average_rating_change < 0 ? "" : "+"}{boardgame.bgg_average_rating_change.toFixed(2)}</span>)</span>;
     }
 
