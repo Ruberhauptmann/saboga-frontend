@@ -22,30 +22,30 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 function parseLinkHeader(header: string): Map<string, Map<string, string>> {
-    if (header.length === 0) {
-        throw new Error('input must not be of zero length');
+  if (header.length === 0) {
+    throw new Error("input must not be of zero length");
+  }
+
+  const parts = header.split(",");
+  const links: Map<string, Map<string, string>> = new Map();
+  parts.forEach((part) => {
+    const section: string[] = part.split(";");
+    if (section.length !== 2) {
+      throw new Error("section could not be split on ';'");
     }
+    const url = new URL(section[0].replace(/<(.*)>/, "$1").trim());
+    const params = url.searchParams;
+    const name = section[1].replace(/rel="(.*)"/, "$1").trim();
+    const link: Map<string, string> = new Map();
+    link.set("url", url.toString());
+    link.set("rel", name);
+    for (const [key, value] of params) {
+      link.set(key, value);
+    }
+    links.set(name, link);
+  });
 
-    const parts = header.split(',');
-    const links: Map<string, Map<string, string>> = new Map();
-    parts.forEach(part => {
-        const section: string[] = part.split(';');
-        if (section.length !== 2) {
-            throw new Error('section could not be split on \';\'');
-        }
-        const url = new URL(section[0].replace(/<(.*)>/, '$1').trim());
-        const params = url.searchParams;
-        const name = section[1].replace(/rel="(.*)"/, '$1').trim();
-        const link: Map<string, string> = new Map()
-        link.set('url', url.toString());
-        link.set('rel', name);
-        for (const [key, value] of params) {
-            link.set(key, value);
-        }
-        links.set(name, link)
-    });
-
-    return links;
+  return links;
 }
 
 export default parseLinkHeader;

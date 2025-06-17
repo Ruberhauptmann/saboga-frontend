@@ -3,7 +3,7 @@ services:
     build:
       context: ../
       dockerfile: ./dev.Dockerfile
-    container_name : saboga-frontend
+    container_name: saboga-frontend
     develop:
       watch:
         - action: sync
