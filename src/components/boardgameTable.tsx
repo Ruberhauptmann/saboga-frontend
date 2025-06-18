@@ -10,11 +10,7 @@ function BoardgameRow({ boardgame }: { boardgame: BoardgameComparison }) {
   const avgChange = 0;
 
   let bgg_rank_change = <span></span>;
-  if (
-    rankChange !== undefined &&
-    rankChange !== null &&
-    Number(rankChange) != 0
-  ) {
+  if (Number(rankChange) != 0) {
     bgg_rank_change = (
       <span>
         (
@@ -27,11 +23,7 @@ function BoardgameRow({ boardgame }: { boardgame: BoardgameComparison }) {
     );
   }
   let bgg_geek_rating_change = <span></span>;
-  if (
-    geekChange !== undefined &&
-    geekChange !== null &&
-    Number(geekChange.toFixed(3)) != 0
-  ) {
+  if (Number(geekChange.toFixed(3)) != 0) {
     bgg_geek_rating_change = (
       <span>
         (
@@ -44,11 +36,7 @@ function BoardgameRow({ boardgame }: { boardgame: BoardgameComparison }) {
     );
   }
   let bgg_average_rating_change = <span></span>;
-  if (
-    avgChange !== undefined &&
-    avgChange !== null &&
-    Number(avgChange.toFixed(2)) != 0
-  ) {
+  if (Number(avgChange.toFixed(2)) != 0) {
     bgg_average_rating_change = (
       <span>
         (

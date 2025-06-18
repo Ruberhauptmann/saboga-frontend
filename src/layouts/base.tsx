@@ -30,7 +30,7 @@ type BaseLayoutProps = {
 
 export default function BaseLayout({ children }: BaseLayoutProps) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<SearchResult[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
@@ -41,7 +41,12 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
 
     const timeout = setTimeout(async () => {
       const data = await fetchSearchResults(searchTerm);
-      setResults(data);
+      if (!data) {
+        console.error("Invalid prediction data");
+        setResults([]);
+      } else {
+        setResults(data);
+      }
       setShowDropdown(true);
     }, 300);
 
