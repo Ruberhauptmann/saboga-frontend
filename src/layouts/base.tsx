@@ -169,7 +169,7 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
         </div>
 
         {/* Page Content */}
-        <main className="pt-8 pb-8 px-4 max-w-full flex-grow">
+        <main className="pt-8 pb-8 px-4 mx-auto max-w-7xl">
           {children ? children : <Outlet />}
         </main>
 

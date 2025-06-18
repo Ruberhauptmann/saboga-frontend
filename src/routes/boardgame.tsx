@@ -70,41 +70,46 @@ function Boardgame() {
     <div>
       <title>{boardgame.name}</title>
 
-      <div className="flex flex-wrap md:flex-nowrap">
+      <div className="flex flex-wrap md:flex-nowrap gap-8">
         <div className="md:basis-1/3 md:w-1/2 lg:w-1/3 flex-grow max-w-full flex-shrink-0">
           <img
-            className="max-w-64 pl-4 object-contain"
+            className="max-w-64 pl-4 object-contain mx-auto"
             src={imageResolver(boardgame.image_url)}
             alt="Boardgame cover"
           />
 
-          <button className="btn btn-primary" onClick={handleLoadPrediction}>
-            Load Prediction
-          </button>
+          <div className="container bg-base-200 my-4 p-4 rounded-md">
+            <div className="flex">
+              <select
+                className="select w-1/3"
+                value={mode}
+                onChange={handleModeChange}
+              >
+                <option value="auto">Auto</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="yearly">Yearly</option>
+              </select>
 
-          <div className="flex">
-            <select
-              className="select w-1/3"
-              value={mode}
-              onChange={handleModeChange}
+              <Datepicker
+                asSingle={false}
+                useRange={true}
+                maxDate={new Date()}
+                startFrom={LAST_MONTH}
+                primaryColor={"blue"}
+                value={value}
+                onChange={handleDateChange}
+                showShortcuts={true}
+                inputClassName="input w-full"
+              />
+            </div>
+
+            <button
+              className="btn btn-primary my-2"
+              onClick={handleLoadPrediction}
             >
-              <option value="auto">Auto</option>
-              <option value="daily">Daily</option>
-              <option value="weekly">Weekly</option>
-              <option value="yearly">Yearly</option>
-            </select>
-
-            <Datepicker
-              asSingle={false}
-              useRange={true}
-              maxDate={new Date()}
-              startFrom={LAST_MONTH}
-              primaryColor={"blue"}
-              value={value}
-              onChange={handleDateChange}
-              showShortcuts={true}
-              inputClassName="input w-full"
-            />
+              Predict
+            </button>
           </div>
 
           <BoardgameStatistics
@@ -114,7 +119,7 @@ function Boardgame() {
         </div>
 
         <div className="md:basis-2/3 flex-grow min-w-0">
-          <div className="flex">
+          <div className="flex mb-2">
             <h1 className="text-3xl">
               {boardgame.name}{" "}
               <span className="text-sm font-bold">
@@ -122,7 +127,7 @@ function Boardgame() {
               </span>
             </h1>
 
-            <div className="max-w-8">
+            <div className="max-w-8 ml-2">
               <a
                 href={"https://boardgamegeek.com/boardgame/" + boardgame.bgg_id}
                 target="_blank"
@@ -144,37 +149,47 @@ function Boardgame() {
             </div>
           </div>
 
-          {boardgame.designers.map((entry) => (
-            <span>{entry.name} </span>
-          ))}
+          <div className="container bg-base-200 p-4 mb-2 rounded-md">
+            {boardgame.designers.map((entry) => (
+              <span>{entry.name} </span>
+            ))}
 
-          <p>
-            {boardgame.minplayers} - {boardgame.maxplayers} players
-          </p>
+            <p>
+              {boardgame.minplayers} - {boardgame.maxplayers} players
+            </p>
 
-          <p>
-            {boardgame.minplaytime} - {boardgame.maxplaytime} min
-          </p>
-
-          {boardgame.categories.map((entry) => (
-            <div className="badge badge-outline badge-neutral">
-              {entry.name}
-            </div>
-          ))}
-          {boardgame.families.map((entry) => (
-            <div className="badge badge-outline badge-neutral">
-              {entry.name}
-            </div>
-          ))}
-          {boardgame.mechanics.map((entry) => (
-            <div className="badge badge-outline badge-neutral">
-              {entry.name}
-            </div>
-          ))}
+            <p>
+              {boardgame.minplaytime} - {boardgame.maxplaytime} min
+            </p>
+          </div>
 
           <article className="prose whitespace-pre-wrap">
             <p>{boardgame.description}</p>
           </article>
+
+          <div className="container">
+            <div className="mb-2">
+              {boardgame.categories.map((entry) => (
+                <div className="badge badge-outline badge-neutral">
+                  {entry.name}
+                </div>
+              ))}
+            </div>
+            <div className="mb-2">
+              {boardgame.families.map((entry) => (
+                <div className="badge badge-outline badge-neutral">
+                  {entry.name}
+                </div>
+              ))}
+            </div>
+            <div className="mb-2">
+              {boardgame.mechanics.map((entry) => (
+                <div className="badge badge-outline badge-neutral">
+                  {entry.name}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
