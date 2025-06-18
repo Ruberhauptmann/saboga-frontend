@@ -26,73 +26,112 @@ error-content	--color-error-content	Foreground content color to use onerrorcolor
  */
 
 export type colorType = {
-    primary: string
-    primaryContent: string
-    secondary: string
-    secondaryContent: string
-    accent: string
-    accentContent: string
-    neutral: string
-    neutralContent: string
-    base100: string
-    base200: string
-    base300: string
-    baseContent: string
-    info: string
-    infoContent: string
-    success: string
-    successContent: string
-    warning: string
-    warningContent: string
-    error: string
-    errorContent: string
-}
+  primary: string;
+  primaryContent: string;
+  secondary: string;
+  secondaryContent: string;
+  accent: string;
+  accentContent: string;
+  neutral: string;
+  neutralContent: string;
+  base100: string;
+  base200: string;
+  base300: string;
+  baseContent: string;
+  info: string;
+  infoContent: string;
+  success: string;
+  successContent: string;
+  warning: string;
+  warningContent: string;
+  error: string;
+  errorContent: string;
+};
 
 export const emptyColors: colorType = {
-    primary: "",
-    primaryContent: "",
-    secondary: "",
-    secondaryContent: "",
-    accent: "",
-    accentContent: "",
-    neutral: "",
-    neutralContent: "",
-    base100: "",
-    base200: "",
-    base300: "",
-    baseContent: "",
-    info: "",
-    infoContent: "",
-    success: "",
-    successContent: "",
-    warning: "",
-    warningContent: "",
-    error: "",
-    errorContent: "",
+  primary: "",
+  primaryContent: "",
+  secondary: "",
+  secondaryContent: "",
+  accent: "",
+  accentContent: "",
+  neutral: "",
+  neutralContent: "",
+  base100: "",
+  base200: "",
+  base300: "",
+  baseContent: "",
+  info: "",
+  infoContent: "",
+  success: "",
+  successContent: "",
+  warning: "",
+  warningContent: "",
+  error: "",
+  errorContent: "",
 };
 
 export function getColors(): colorType {
-    return {
-        primary: getComputedStyle(document.documentElement).getPropertyValue('--color-primary'),
-        primaryContent: getComputedStyle(document.documentElement).getPropertyValue('--color-primary-content'),
-        secondary: getComputedStyle(document.documentElement).getPropertyValue('--color-secondary'),
-        secondaryContent: getComputedStyle(document.documentElement).getPropertyValue('--color-secondary-content'),
-        accent: getComputedStyle(document.documentElement).getPropertyValue('--color-accent'),
-        accentContent: getComputedStyle(document.documentElement).getPropertyValue('--color-accent-content'),
-        neutral: getComputedStyle(document.documentElement).getPropertyValue('--color-neutral'),
-        neutralContent: getComputedStyle(document.documentElement).getPropertyValue('--color-neutral-content'),
-        base100: getComputedStyle(document.documentElement).getPropertyValue('--color-base-100'),
-        base200: getComputedStyle(document.documentElement).getPropertyValue('--color-base-200'),
-        base300: getComputedStyle(document.documentElement).getPropertyValue('--color-base-300'),
-        baseContent: getComputedStyle(document.documentElement).getPropertyValue('--color-base-content'),
-        info: getComputedStyle(document.documentElement).getPropertyValue('--color-info'),
-        infoContent: getComputedStyle(document.documentElement).getPropertyValue('--color-info-content'),
-        success: getComputedStyle(document.documentElement).getPropertyValue('--color-success'),
-        successContent: getComputedStyle(document.documentElement).getPropertyValue('--color-success-content'),
-        warning: getComputedStyle(document.documentElement).getPropertyValue('--color-warning'),
-        warningContent: getComputedStyle(document.documentElement).getPropertyValue('--color-warning-content'),
-        error: getComputedStyle(document.documentElement).getPropertyValue('--color-error'),
-        errorContent: getComputedStyle(document.documentElement).getPropertyValue('--color-error-content'),
-    };
+  return {
+    primary: getComputedStyle(document.documentElement).getPropertyValue(
+      "--color-primary",
+    ),
+    primaryContent: getComputedStyle(document.documentElement).getPropertyValue(
+      "--color-primary-content",
+    ),
+    secondary: getComputedStyle(document.documentElement).getPropertyValue(
+      "--color-secondary",
+    ),
+    secondaryContent: getComputedStyle(
+      document.documentElement,
+    ).getPropertyValue("--color-secondary-content"),
+    accent: getComputedStyle(document.documentElement).getPropertyValue(
+      "--color-accent",
+    ),
+    accentContent: getComputedStyle(document.documentElement).getPropertyValue(
+      "--color-accent-content",
+    ),
+    neutral: getComputedStyle(document.documentElement).getPropertyValue(
+      "--color-neutral",
+    ),
+    neutralContent: getComputedStyle(document.documentElement).getPropertyValue(
+      "--color-neutral-content",
+    ),
+    base100: getComputedStyle(document.documentElement).getPropertyValue(
+      "--color-base-100",
+    ),
+    base200: getComputedStyle(document.documentElement).getPropertyValue(
+      "--color-base-200",
+    ),
+    base300: getComputedStyle(document.documentElement).getPropertyValue(
+      "--color-base-300",
+    ),
+    baseContent: getComputedStyle(document.documentElement).getPropertyValue(
+      "--color-base-content",
+    ),
+    info: getComputedStyle(document.documentElement).getPropertyValue(
+      "--color-info",
+    ),
+    infoContent: getComputedStyle(document.documentElement).getPropertyValue(
+      "--color-info-content",
+    ),
+    success: getComputedStyle(document.documentElement).getPropertyValue(
+      "--color-success",
+    ),
+    successContent: getComputedStyle(document.documentElement).getPropertyValue(
+      "--color-success-content",
+    ),
+    warning: getComputedStyle(document.documentElement).getPropertyValue(
+      "--color-warning",
+    ),
+    warningContent: getComputedStyle(document.documentElement).getPropertyValue(
+      "--color-warning-content",
+    ),
+    error: getComputedStyle(document.documentElement).getPropertyValue(
+      "--color-error",
+    ),
+    errorContent: getComputedStyle(document.documentElement).getPropertyValue(
+      "--color-error-content",
+    ),
+  };
 }
-
