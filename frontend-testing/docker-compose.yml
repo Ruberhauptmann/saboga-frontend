@@ -12,6 +12,7 @@ services:
     labels:
       - "traefik.http.routers.saboga-frontend.rule=Host(`saboga.localhost`)"
       - "traefik.http.routers.saboga-frontend.tls=true"
+      - "traefik.http.services.saboga-frontend.loadbalancer.server.port=5173"
     expose:
       - "5173"
     networks:
@@ -23,5 +24,5 @@ networks:
     name: saboga-reverse-proxy
     external: true
   saboga-api:
-    name: api-testing_saboga-api
+    name: saboga-api
     external: true
