@@ -18,7 +18,7 @@ function Boardgame() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigation = useNavigation();
 
-  const [mode, setMode] = useState("auto"); // Default mode is 'Auto'
+  const [mode, setMode] = useState("auto");
 
   const urlStartDate = searchParams.get("start_date");
   const LAST_MONTH = new Date();
@@ -115,6 +115,8 @@ function Boardgame() {
           <BoardgameStatistics
             boardgame={boardgame}
             loadPrediction={loadPrediction}
+            start_date={searchParams.get("start_date")}
+            end_date={searchParams.get("end_date")}
           />
         </div>
 

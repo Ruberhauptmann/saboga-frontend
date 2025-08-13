@@ -4,7 +4,7 @@ import type { Params } from "react-router-dom";
 import parseLinkHeader from "./parseLinkHeader.tsx";
 
 // Define the base URL
-export const apiBaseUrl = "/api/v1";
+export const apiBaseUrl = "/api";
 
 const client = createClient<paths>({
   baseUrl: apiBaseUrl,
@@ -80,14 +80,23 @@ export const boardgameLoader = async ({
 
 export const forecastLoader = async ({
   params,
+  searchParams,
 }: {
   params: Params<"boardgameId">;
+  searchParams?: {
+    start_date?: string;
+    end_date?: string;
+  };
 }) => {
   const { data, error, response } = await client.GET(
     "/boardgames/{bgg_id}/forecast",
     {
       params: {
         path: { bgg_id: Number(params.boardgameId!) },
+        query: {
+          start_date: searchParams?.start_date,
+          end_date: searchParams?.end_date,
+        },
       },
     },
   );

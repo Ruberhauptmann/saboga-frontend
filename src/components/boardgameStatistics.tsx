@@ -38,9 +38,13 @@ import { getColors } from "../functions/getColors.tsx";
 function BoardgameStatistics({
   boardgame,
   loadPrediction,
+  start_date,
+  end_date
 }: {
   boardgame: Boardgame;
   loadPrediction: boolean;
+  start_date: string | null;
+  end_date: string | null;
 }) {
   const labels = boardgame.bgg_rank_history.map(
     (entry) => new Date(entry.date),
@@ -65,6 +69,7 @@ function BoardgameStatistics({
     try {
       const data = await forecastLoader({
         params: { boardgameId: boardgame.bgg_id.toString() },
+        searchParams: {start_date: start_date, end_date: end_date}
       });
       if (!data) {
         console.error("Invalid prediction data");
