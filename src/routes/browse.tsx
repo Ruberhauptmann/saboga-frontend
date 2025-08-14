@@ -35,7 +35,6 @@ function Browse() {
     setSearchParams(newSearchParams, { preventScrollReset: true });
   };
 
-  // Helper for quick-select buttons
   const selectQuickDate = (date: Date) => {
     handleDateChange({
       startDate: date,
