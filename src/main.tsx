@@ -12,6 +12,7 @@ import {
   boardgameLoader,
   designerGraphLoader,
   search,
+  trendingAndDecliningGamesLoader,
 } from "./functions/apiService.tsx";
 import SearchResults from "./routes/searchResults.tsx";
 import Designer from "./routes/designers.tsx";
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+        loader: trendingAndDecliningGamesLoader
       },
       {
         path: "/browse/boardgame/",

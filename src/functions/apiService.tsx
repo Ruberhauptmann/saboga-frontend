@@ -155,3 +155,30 @@ export const designerGraphLoader = async ({}: {}) => {
 
   return data;
 };
+
+export const trendingAndDecliningGamesLoader = async () => {
+  const [trendingRes, decliningRes] = await Promise.all([
+    client.GET("/boardgames/trending"),
+    client.GET("/boardgames/declining"),
+  ]);
+
+  const { data: trendingData, error: trendingError, response: trendingResponse } = trendingRes;
+  const { data: decliningData, error: decliningError, response: decliningResponse } = decliningRes;
+
+  if (trendingError) {
+    const status = trendingResponse?.status || 500;
+    const statusText = trendingResponse?.statusText || "Unknown error";
+    throw new Response(statusText, { status });
+  }
+
+  if (decliningError) {
+    const status = decliningResponse?.status || 500;
+    const statusText = decliningResponse?.statusText || "Unknown error";
+    throw new Response(statusText, { status });
+  }
+
+  return {
+    trending: trendingData,
+    declining: decliningData,
+  };
+};
