@@ -10,8 +10,6 @@ import {random} from 'graphology-layout';
 
 type DesignerGraphData = components["schemas"]["DesignerNetwork"];
 
-const sigmaStyle = { height: "500px", width: "500px" };
-
 function LoadGraph({ data }: { data: DesignerGraphData }) {
   const loadGraph = useLoadGraph();
 
