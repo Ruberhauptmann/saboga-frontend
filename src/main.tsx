@@ -5,13 +5,16 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./routes/errors.tsx";
 import Boardgame from "./routes/boardgame.tsx";
+import Home from "./routes/home.tsx";
 import BaseLayout from "./layouts/base.tsx";
 import {
   boardgameListLoader,
   boardgameLoader,
+  designerGraphLoader,
   search,
 } from "./functions/apiService.tsx";
 import SearchResults from "./routes/searchResults.tsx";
+import Designer from "./routes/designers.tsx";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +27,15 @@ const router = createBrowserRouter([
     ),
     children: [
       {
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: "/browse/boardgame/",
+        element: <Browse />,
+        loader: boardgameListLoader,
+      },
+      {
         path: "/browse/boardgame/",
         element: <Browse />,
         loader: boardgameListLoader,
@@ -34,9 +46,14 @@ const router = createBrowserRouter([
         loader: boardgameListLoader,
       },
       {
-        path: "boardgame/:boardgameId",
+        path: "/boardgame/:boardgameId",
         element: <Boardgame />,
         loader: boardgameLoader,
+      },
+      {
+        path: "/designers",
+        element: <Designer />,
+        loader: designerGraphLoader,
       },
       {
         path: "/search",

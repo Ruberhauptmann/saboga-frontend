@@ -11,7 +11,7 @@ import Datepicker, { DateRangeType } from "react-tailwindcss-datepicker";
 import { format } from "date-fns";
 
 type BoardgameWithHistoricalData =
-  components["schemas"]["BoardgameWithHistoricalData"];
+  components["schemas"]["BoardgameSingle"];
 
 function Boardgame() {
   const boardgame = useLoaderData() as BoardgameWithHistoricalData;

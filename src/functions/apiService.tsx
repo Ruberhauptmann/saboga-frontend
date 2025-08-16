@@ -141,3 +141,17 @@ export const search = async ({ request }: { request: Request }) => {
 
   return { data };
 };
+
+
+export const designerGraphLoader = async ({}: {}) => {
+  const { data, error, response } = await client.GET(
+    "/designers/clusters",
+  );
+  if (error) {
+    const status = response?.status || 500;
+    const statusText = response?.statusText || "Unknown error";
+    throw new Response(statusText, { status });
+  }
+
+  return data;
+};

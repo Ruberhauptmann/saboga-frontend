@@ -115,6 +115,9 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
                 <li>
                   <NavLink to="/browse/boardgame/">Browse</NavLink>
                 </li>
+                <li>
+                  <NavLink to="/designers">Designers</NavLink>
+                </li>
               </ul>
             </div>
           </div>
@@ -174,7 +177,7 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
         </div>
 
         {/* Page Content */}
-        <main className="pt-8 pb-8 px-4 mx-auto max-w-7xl">
+        <main className="pt-8 pb-8 px-4 mx-auto max-w-7xl min-h-screen">
           {children ? children : <Outlet />}
         </main>
 
