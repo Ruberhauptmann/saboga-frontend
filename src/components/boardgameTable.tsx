@@ -2,7 +2,7 @@ import type { components } from "../apischema.d.ts";
 import { Link, NavLink, useLoaderData } from "react-router-dom";
 import imageResolver from "../functions/imageResolver.tsx";
 
-type BoardgameComparison = components["schemas"]["BoardgameComparison"];
+type BoardgameComparison = components["schemas"]["BoardgameInList"];
 
 function BoardgameRow({ boardgame }: { boardgame: BoardgameComparison }) {
   const rankChange = boardgame.bgg_rank_change ?? 0;

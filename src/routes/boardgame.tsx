@@ -115,8 +115,8 @@ function Boardgame() {
           <BoardgameStatistics
             boardgame={boardgame}
             loadPrediction={loadPrediction}
-            start_date={searchParams.get("start_date")}
-            end_date={searchParams.get("end_date")}
+            start_date={searchParams.get("start_date") ?? undefined}
+            end_date={searchParams.get("end_date") ?? undefined}
           />
         </div>
 

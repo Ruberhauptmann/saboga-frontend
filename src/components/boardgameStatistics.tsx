@@ -18,7 +18,7 @@ import annotationPlugin from "chartjs-plugin-annotation";
 import "chartjs-adapter-date-fns";
 import { forecastLoader } from "../functions/apiService.tsx";
 
-type Boardgame = components["schemas"]["BoardgameWithHistoricalData"];
+type Boardgame = components["schemas"]["BoardgameSingle"];
 type Prediction = components["schemas"]["Prediction"];
 
 ChartJS.register(
@@ -43,8 +43,8 @@ function BoardgameStatistics({
 }: {
   boardgame: Boardgame;
   loadPrediction: boolean;
-  start_date: string | null;
-  end_date: string | null;
+  start_date: string | undefined;
+  end_date: string | undefined;
 }) {
   const labels = boardgame.bgg_rank_history.map(
     (entry) => new Date(entry.date),
