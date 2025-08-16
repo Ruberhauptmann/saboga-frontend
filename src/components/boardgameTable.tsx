@@ -2,12 +2,12 @@ import type { components } from "../apischema.d.ts";
 import { Link, NavLink, useLoaderData } from "react-router-dom";
 import imageResolver from "../functions/imageResolver.tsx";
 
-type BoardgameComparison = components["schemas"]["BaseBoardgame"];
+type BoardgameComparison = components["schemas"]["BoardgameComparison"];
 
 function BoardgameRow({ boardgame }: { boardgame: BoardgameComparison }) {
-  const rankChange = 0;
-  const geekChange = 0;
-  const avgChange = 0;
+  const rankChange = boardgame.bgg_rank_change ?? 0;
+  const geekChange = boardgame.bgg_geek_rating_change ?? 0;
+  const avgChange = boardgame.bgg_average_rating_change ?? 0;
 
   let bgg_rank_change = <span></span>;
   if (Number(rankChange) != 0) {

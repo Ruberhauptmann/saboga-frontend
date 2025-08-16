@@ -2,7 +2,7 @@ import BoardgameTable from "../components/boardgameTable.tsx";
 import { useNavigation, useSearchParams } from "react-router-dom";
 import Datepicker, { DateRangeType } from "react-tailwindcss-datepicker";
 import { useState } from "react";
-import { format } from "date-fns";
+import { format, subMonths, subYears } from "date-fns";
 
 function Browse() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -35,6 +35,13 @@ function Browse() {
     setSearchParams(newSearchParams, { preventScrollReset: true });
   };
 
+  const selectQuickDate = (date: Date) => {
+    handleDateChange({
+      startDate: date,
+      endDate: null,
+    });
+  };
+
   if (navigation.state === "loading") {
     return (
       <span className="loading loading-dots loading-md text-primary"></span>
@@ -49,6 +56,31 @@ function Browse() {
         <legend className="text-sm font-light tracking-tight">
           Compare to
         </legend>
+
+        <div className="flex gap-2 mb-2">
+          <button
+            type="button"
+            className="btn btn-xs btn-outline"
+            onClick={() => selectQuickDate(subMonths(new Date(), 1))}
+          >
+            1 month ago
+          </button>
+          <button
+            type="button"
+            className="btn btn-xs btn-outline"
+            onClick={() => selectQuickDate(subYears(new Date(), 1))}
+          >
+            1 year ago
+          </button>
+          <button
+            type="button"
+            className="btn btn-xs btn-outline"
+            onClick={() => selectQuickDate(subYears(new Date(), 5))}
+          >
+            5 years ago
+          </button>
+        </div>
+
         <Datepicker
           asSingle={true}
           useRange={false}
@@ -57,7 +89,6 @@ function Browse() {
           primaryColor={"blue"}
           value={value}
           onChange={handleDateChange}
-          showShortcuts={true}
           inputClassName="input w-full"
         />
       </fieldset>
