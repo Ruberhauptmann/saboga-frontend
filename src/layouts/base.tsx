@@ -1,209 +1,290 @@
+import React, { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import {
   Link,
   NavLink,
   Outlet,
   ScrollRestoration,
+  useLocation,
   useNavigate,
 } from "react-router-dom";
-import React, { ReactNode, useEffect, useState } from "react";
-import { search } from "../functions/apiService.tsx";
+import { search } from "../functions/apiService";
 import type { components } from "../apischema";
-
-const fetchSearchResults = async (query: string, limit = 5) => {
-  const fakeRequest = new Request(
-    `http://localhost/search?query=${query}&limit=${limit}`,
-  );
-  try {
-    const { data } = await search({ request: fakeRequest });
-    return data;
-  } catch (err) {
-    console.error("Failed to load search results", err);
-    return [];
-  }
-};
 
 type SearchResult = components["schemas"]["SearchResult"];
 
-type BaseLayoutProps = {
-  children?: ReactNode;
-};
+type NavSubItem = { label: string; to: string };
+type NavItem = { label: string; to?: string; submenu?: NavSubItem[] };
+
+const navElements: NavItem[] = [
+  {
+    label: "Browse",
+    submenu: [
+      { label: "Boardgames", to: "/browse/boardgame/" },
+      { label: "Designers", to: "/browse/designers" },
+    ],
+  },
+  {
+    label: "Networks",
+    submenu: [{ label: "Designers", to: "/network/designers" }],
+  },
+];
+
+// --- helper to fetch search results through your apiService ---
+async function fetchSearchResults(query: string, limit = 5): Promise<SearchResult[]> {
+  const req = new Request(`http://localhost/search?query=${encodeURIComponent(query)}&limit=${limit}`);
+  try {
+    const { data } = await search({ request: req });
+    return Array.isArray(data) ? (data as SearchResult[]) : [];
+  } catch (e) {
+    console.error("Search failed:", e);
+    return [];
+  }
+}
+
+type BaseLayoutProps = { children?: ReactNode };
 
 export default function BaseLayout({ children }: BaseLayoutProps) {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Search state
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [showResults, setShowResults] = useState(false);
 
+  // Dropdown states
+  const [desktopOpen, setDesktopOpen] = useState<string | null>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const desktopMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close menus & search on route change
   useEffect(() => {
-    if (searchTerm.trim() === "") {
+    setDesktopOpen(null);
+    setMobileOpen(false);
+    setShowResults(false);
+  }, [location]);
+
+  // Click outside to close desktop dropdowns
+  useEffect(() => {
+    function onDocClick(e: MouseEvent) {
+      if (
+        desktopMenuRef.current &&
+        !desktopMenuRef.current.contains(e.target as Node)
+      ) {
+        setDesktopOpen(null);
+      }
+    }
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, []);
+
+  // Debounced live search
+  useEffect(() => {
+    if (!searchTerm.trim()) {
       setResults([]);
+      setShowResults(false);
       return;
     }
-
-    const timeout = setTimeout(async () => {
-      const data = await fetchSearchResults(searchTerm);
-      if (!data) {
-        console.error("Invalid prediction data");
-        setResults([]);
-      } else {
-        setResults(data);
-      }
-      setShowDropdown(true);
-    }, 300);
-
-    return () => clearTimeout(timeout);
+    const handle = setTimeout(async () => {
+      const data = await fetchSearchResults(searchTerm.trim(), 8);
+      setResults(data);
+      setShowResults(true);
+    }, 250);
+    return () => clearTimeout(handle);
   }, [searchTerm]);
 
-  const navigate = useNavigate();
+  // Ensure suggestion box is above everything
+  const suggestionsVisible = useMemo(
+    () => showResults && results.length > 0,
+    [showResults, results],
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setShowDropdown(false);
-    navigate(`/search?query=${encodeURIComponent(searchTerm)}`);
+    setShowResults(false);
+    if (searchTerm.trim()) {
+      navigate(`/search?query=${encodeURIComponent(searchTerm.trim())}`);
+    }
   };
 
   return (
     <div>
-      <div>
-        {/* Navbar */}
-        <div className="navbar bg-base-100 shadow-sm">
-          <div className="navbar-start">
-            <div className="dropdown">
-              <div
-                tabIndex={0}
-                role="button"
-                className="btn btn-ghost lg:hidden"
+      {/* Navbar */}
+      <div className="navbar bg-base-100 shadow-sm relative z-50">
+        <div className="navbar-start">
+          {/* Mobile hamburger + dropdown */}
+          <div className={`dropdown ${mobileOpen ? "dropdown-open" : ""}`}>
+            <button
+              type="button"
+              className="btn btn-ghost lg:hidden"
+              onClick={() => setMobileOpen((v) => !v)}
+              aria-haspopup="menu"
+              aria-expanded={mobileOpen}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h8m-8 6h16"
-                  />
-                </svg>
-              </div>
-              <ul
-                tabIndex={0}
-                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
-              >
-                <li>
-                  <NavLink to="/browse/boardgame/">Browse</NavLink>
-                </li>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
+              </svg>
+            </button>
 
-                <div className="h-full">
-                  <a href="https://boardgamegeek.com/" target="_blank">
-                    <img
-                      alt="powered by BGG logo"
-                      className="object-contain w-32"
-                      src="/powered_by_bgg.webp"
-                    />
-                  </a>
-                </div>
-              </ul>
-            </div>
-            <Link to="/" className="btn btn-ghost btn-primary text-xl">
-              saboga
-            </Link>
-            <div className="hidden md:block">
-              <ul className="menu menu-horizontal px-1">
-                <li>
-                  <NavLink to="/browse/boardgame/">Browse</NavLink>
-                </li>
-                <li>
-                  <NavLink to="/designers">Designers</NavLink>
-                </li>
-              </ul>
-            </div>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-56 p-2 shadow z-50"
+              role="menu"
+            >
+              {navElements.map((item) =>
+                item.submenu ? (
+                  <li key={item.label}>
+                    <details>
+                      <summary>{item.label}</summary>
+                      <ul>
+                        {item.submenu.map((sub) => (
+                          <li key={sub.to}>
+                            <NavLink to={sub.to} onClick={() => setMobileOpen(false)}>
+                              {sub.label}
+                            </NavLink>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  </li>
+                ) : (
+                  <li key={item.label}>
+                    <NavLink to={item.to!} onClick={() => setMobileOpen(false)}>
+                      {item.label}
+                    </NavLink>
+                  </li>
+                )
+              )}
+              <li className="mt-2">
+                <a href="https://boardgamegeek.com/" target="_blank">
+                  <img alt="powered by BGG logo" className="object-contain w-32" src="/powered_by_bgg.webp" />
+                </a>
+              </li>
+            </ul>
           </div>
 
-          <div className="navbar-end w-2/3">
-            <form onSubmit={handleSubmit}>
-              <label className="input">
-                <svg
-                  className="h-[1em] opacity-50"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                >
-                  <g
-                    stroke-linejoin="round"
-                    stroke-linecap="round"
-                    stroke-width="2.5"
-                    fill="none"
-                    stroke="currentColor"
+          {/* Logo */}
+          <Link to="/" className="btn btn-ghost btn-primary text-xl">
+            saboga
+          </Link>
+
+          {/* Desktop menu */}
+          <div className="hidden md:block" ref={desktopMenuRef}>
+            <ul className="menu menu-horizontal px-1">
+              {navElements.map((item) =>
+                item.submenu ? (
+                  <li
+                    key={item.label}
+                    className={`dropdown dropdown-bottom ${desktopOpen === item.label ? "dropdown-open" : ""}`}
                   >
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <path d="m21 21-4.3-4.3"></path>
-                  </g>
-                </svg>
-                <input
-                  type="search"
-                  className="grow"
-                  placeholder="Search"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </label>
-              {showDropdown && results.length > 0 && (
-                <ul className="absolute z-10 bg-base-100 shadow-md mt-1 w-full rounded-box max-h-60 overflow-y-auto">
-                  {results.map((game: SearchResult) => (
-                    <li key={game.bgg_id} className="p-2 hover:bg-base-200">
-                      <Link
-                        to={`/boardgame/${game.bgg_id}`}
-                        onClick={() => setShowDropdown(false)}
-                      >
-                        {game.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                    <button
+                      type="button"
+                      className="btn btn-ghost rounded-none"
+                      onClick={() =>
+                        setDesktopOpen((v) => (v === item.label ? null : item.label))
+                      }
+                      aria-haspopup="menu"
+                      aria-expanded={desktopOpen === item.label}
+                    >
+                      {item.label}
+                    </button>
+                    <ul
+                      tabIndex={0}
+                      className="menu dropdown-content bg-base-100 rounded-box mt-1 p-2 shadow z-50 w-56"
+                      role="menu"
+                    >
+                      {item.submenu.map((sub) => (
+                        <li key={sub.to}>
+                          <NavLink to={sub.to} onClick={() => setDesktopOpen(null)}>
+                            {sub.label}
+                          </NavLink>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ) : (
+                  <li key={item.label}>
+                    <NavLink to={item.to!}>{item.label}</NavLink>
+                  </li>
+                )
               )}
-            </form>
-            <div className="hidden md:block h-full">
-              <a href="https://boardgamegeek.com/" target="_blank">
-                <img
-                  alt="powered by BGG logo"
-                  className="object-contain w-32"
-                  src="/powered_by_bgg.webp"
-                />
-              </a>
-            </div>
+            </ul>
           </div>
         </div>
 
-        {/* Page Content */}
-        <main className="pt-8 pb-8 px-4 mx-auto max-w-7xl min-h-screen">
-          {children ? children : <Outlet />}
-        </main>
+        {/* Search */}
+        <div className="navbar-end w-2/3 relative">
+          <form onSubmit={handleSubmit} className="w-full">
+            <div className="relative">
+              <input
+                type="search"
+                className="input input-bordered w-full pl-10"
+                placeholder="Search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onFocus={() => results.length > 0 && setShowResults(true)}
+                onBlur={() => setTimeout(() => setShowResults(false), 120)} // allow click
+                aria-label="Search games"
+              />
+              <svg
+                className="h-5 w-5 opacity-60 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.3-4.3"></path>
+                </g>
+              </svg>
+            </div>
 
-        {/* Footer */}
-        <div className="divider"></div>
-        <footer className="footer footer-center pt-0.5 p-10">
-          <aside>
-            <p>
-              made with{" "}
-              <a href="https://react.dev/" className="link link-hover">
-                React
-              </a>
-              ,
-              <a href="https://tailwindcss.com" className="link link-hover">
-                {" "}
-                TailwindCSS
-              </a>
-              , and
-              <a href="https://daisyui.com/" className="link link-hover">
-                {" "}
-                DaisyUI
-              </a>
-            </p>
-          </aside>
-        </footer>
+            {suggestionsVisible && (
+              <ul className="absolute z-50 bg-base-100 shadow-md mt-1 w-full rounded-box max-h-60 overflow-y-auto">
+                {results.map((game) => (
+                  <li key={game.bgg_id} className="p-2 hover:bg-base-200">
+                    <Link
+                      to={`/boardgame/${game.bgg_id}`}
+                      onClick={() => setShowResults(false)}
+                    >
+                      {game.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </form>
+
+          <div className="hidden md:block h-full ml-4">
+            <a href="https://boardgamegeek.com/" target="_blank">
+              <img alt="powered by BGG logo" className="object-contain w-32" src="/powered_by_bgg.webp" />
+            </a>
+          </div>
+        </div>
       </div>
+
+      {/* Page Content */}
+      <main className="pt-8 pb-8 px-4 mx-auto max-w-7xl min-h-screen">
+        {children ? children : <Outlet />}
+      </main>
+
+      {/* Footer */}
+      <div className="divider"></div>
+      <footer className="footer footer-center pt-0.5 p-10">
+        <aside>
+          <p>
+            made with <a href="https://react.dev/" className="link link-hover">React</a>,{" "}
+            <a href="https://tailwindcss.com" className="link link-hover">TailwindCSS</a>, and{" "}
+            <a href="https://daisyui.com/" className="link link-hover">DaisyUI</a>
+          </p>
+        </aside>
+      </footer>
 
       <ScrollRestoration />
     </div>

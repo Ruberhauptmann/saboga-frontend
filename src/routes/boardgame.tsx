@@ -1,5 +1,6 @@
 import type { components } from "../apischema";
 import {
+  Link,
   useLoaderData,
   useNavigation,
   useSearchParams,
@@ -172,23 +173,29 @@ function Boardgame() {
           <div className="container">
             <div className="mb-2">
               {boardgame.categories.map((entry) => (
-                <div className="badge badge-outline badge-neutral">
-                  {entry.name}
-                </div>
+                <Link to={`/category/${entry.bgg_id}`}>
+                  <div className="badge badge-outline badge-neutral">
+                    {entry.name}
+                  </div>
+                </Link>
               ))}
             </div>
             <div className="mb-2">
               {boardgame.families.map((entry) => (
-                <div className="badge badge-outline badge-neutral">
-                  {entry.name}
-                </div>
+                <Link to={`/family/${entry.bgg_id}`}>
+                  <div className="badge badge-outline badge-neutral">
+                    {entry.name}
+                  </div>
+                </Link>
               ))}
             </div>
             <div className="mb-2">
               {boardgame.mechanics.map((entry) => (
-                <div className="badge badge-outline badge-neutral">
-                  {entry.name}
-                </div>
+                <Link to={`/mechanic/${entry.bgg_id}`}>
+                  <div className="badge badge-outline badge-neutral">
+                    {entry.name}
+                  </div>
+                </Link>
               ))}
             </div>
           </div>

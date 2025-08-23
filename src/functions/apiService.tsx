@@ -86,6 +86,86 @@ export const boardgameLoader = async ({
   return data;
 };
 
+export const designerLoader = async ({
+  params,
+}: {
+  params: Params<"designerId">;
+}) => {
+  const { data, error, response } = await client.GET("/designers/{bgg_id}", {
+    params: {
+      path: { bgg_id: Number(params.designerId!) },
+    },
+  });
+  if (error) {
+    const status = response.status || 500;
+    const errorMessage = error.detail ? JSON.stringify(error.detail) : "Unknown error";
+
+    throw new Response(errorMessage, { status });
+  }
+
+  return data;
+};
+
+export const categoryLoader = async ({
+  params,
+}: {
+  params: Params<"categoryId">;
+}) => {
+  const { data, error, response } = await client.GET("/categories/{bgg_id}", {
+    params: {
+      path: { bgg_id: Number(params.categoryId!) },
+    },
+  });
+  if (error) {
+    const status = response.status || 500;
+    const errorMessage = error.detail ? JSON.stringify(error.detail) : "Unknown error";
+
+    throw new Response(errorMessage, { status });
+  }
+
+  return data;
+};
+
+export const familyLoader = async ({
+  params,
+}: {
+  params: Params<"familyId">;
+}) => {
+  const { data, error, response } = await client.GET("/families/{bgg_id}", {
+    params: {
+      path: { bgg_id: Number(params.familyId!) },
+    },
+  });
+  if (error) {
+    const status = response.status || 500;
+    const errorMessage = error.detail ? JSON.stringify(error.detail) : "Unknown error";
+
+    throw new Response(errorMessage, { status });
+  }
+
+  return data;
+};
+
+export const mechanicLoader = async ({
+  params,
+}: {
+  params: Params<"mechanicId">;
+}) => {
+  const { data, error, response } = await client.GET("/mechanics/{bgg_id}", {
+    params: {
+      path: { bgg_id: Number(params.mechanicId!) },
+    },
+  });
+  if (error) {
+    const status = response.status || 500;
+    const errorMessage = error.detail ? JSON.stringify(error.detail) : "Unknown error";
+
+    throw new Response(errorMessage, { status });
+  }
+
+  return data;
+};
+
 export const forecastLoader = async ({
   params,
   searchParams,

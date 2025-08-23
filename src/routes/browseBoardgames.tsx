@@ -1,12 +1,20 @@
 import BoardgameTable from "../components/boardgameTable.tsx";
-import { useNavigation, useSearchParams } from "react-router-dom";
+import { NavLink, useLoaderData, useNavigation, useSearchParams } from "react-router-dom";
 import Datepicker, { DateRangeType } from "react-tailwindcss-datepicker";
 import { useState } from "react";
 import { format, subMonths, subYears } from "date-fns";
+import { components } from "../apischema";
+
+type BoardgameInList= components["schemas"]["BoardgameInList"];
 
 function Browse() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigation = useNavigation();
+
+  const { data: boardgames, links} = useLoaderData() as {
+    data: BoardgameInList[];
+    links: Map<string, Map<string, string>>;
+  };
 
   const urlCompareTo = searchParams.get("compare_to");
 
@@ -93,7 +101,34 @@ function Browse() {
         />
       </fieldset>
 
-      <BoardgameTable />
+      <div className="flex justify-end">
+        <NavLink
+          className="pr-1 link"
+          to={`/browse/boardgame/page/${links.get("first")?.get("page")}`}
+        >
+          {links.get("first")?.get("page")}
+        </NavLink>
+        <NavLink
+          className="pr-1 link"
+          to={`/browse/boardgame/page/${links.get("prev")?.get("page")}`}
+        >
+          {links.get("prev")?.get("rel")}
+        </NavLink>
+        <NavLink
+          className="link"
+          to={`/browse/boardgame/page/${links.get("next")?.get("page")}`}
+        >
+          {links.get("next")?.get("rel")}
+        </NavLink>
+        <NavLink
+          className="pl-1 link"
+          to={`/browse/boardgame/page/${links.get("last")?.get("page")}`}
+        >
+          {links.get("last")?.get("page")}
+        </NavLink>
+      </div>
+
+      <BoardgameTable boardgames={boardgames} />
     </div>
   );
 }

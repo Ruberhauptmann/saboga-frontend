@@ -1,10 +1,11 @@
 import type { components } from "../apischema.d.ts";
-import { Link, NavLink, useLoaderData } from "react-router-dom";
+import { Link } from "react-router-dom";
 import imageResolver from "../functions/imageResolver.tsx";
 
-type BoardgameComparison = components["schemas"]["BoardgameInList"];
+type BoardgameInList= components["schemas"]["BoardgameInList"];
 
-function BoardgameRow({ boardgame }: { boardgame: BoardgameComparison }) {
+
+function BoardgameRow({ boardgame }: { boardgame: BoardgameInList }) {
   const rankChange = boardgame.bgg_rank_change ?? 0;
   const geekChange = boardgame.bgg_geek_rating_change ?? 0;
   const avgChange = boardgame.bgg_average_rating_change ?? 0;
@@ -108,40 +109,10 @@ function BoardgameRow({ boardgame }: { boardgame: BoardgameComparison }) {
   );
 }
 
-function BoardgameTable() {
-  const { data: boardgames, links } = useLoaderData() as {
-    data: BoardgameComparison[];
-    links: Map<string, Map<string, string>>;
-  };
+function BoardgameTable({boardgames}: {boardgames: BoardgameInList[] }) {
 
   return (
     <div className="max-w-full overflow-x-auto">
-      <div className="flex justify-end">
-        <NavLink
-          className="pr-1 link"
-          to={`/browse/boardgame/page/${links.get("first")?.get("page")}`}
-        >
-          {links.get("first")?.get("page")}
-        </NavLink>
-        <NavLink
-          className="pr-1 link"
-          to={`/browse/boardgame/page/${links.get("prev")?.get("page")}`}
-        >
-          {links.get("prev")?.get("rel")}
-        </NavLink>
-        <NavLink
-          className="link"
-          to={`/browse/boardgame/page/${links.get("next")?.get("page")}`}
-        >
-          {links.get("next")?.get("rel")}
-        </NavLink>
-        <NavLink
-          className="pl-1 link"
-          to={`/browse/boardgame/page/${links.get("last")?.get("page")}`}
-        >
-          {links.get("last")?.get("page")}
-        </NavLink>
-      </div>
       <div className="max-h-screen overflow-y-auto">
         <table className="table md:table-md table-xs table-zebra table-pin-rows w-full">
           <thead>

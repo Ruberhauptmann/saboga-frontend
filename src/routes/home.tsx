@@ -1,11 +1,12 @@
 import { useLoaderData } from "react-router-dom";
 import { components } from "../apischema";
+import BoardgameTable from "../components/boardgameTable";
 
 
-type BoardgameSingle = components["schemas"]["BoardgameSingle"];
+type BoardgameInList = components["schemas"]["BoardgameInList"];
 type BoardgamesLoaderData = {
-  trending: BoardgameSingle[];
-  declining: BoardgameSingle[];
+  trending: BoardgameInList[];
+  declining: BoardgameInList[];
 };
 
 export default function Home() {
@@ -15,16 +16,14 @@ export default function Home() {
     <div className="grid grid-cols-2 gap-4">
       <div>
         <p className="text-xl">Trending</p>
-        <ul>
-          {trending.map(game => <li key={game.bgg_id}>{game.name}</li>)}
-        </ul>
+
+        <BoardgameTable boardgames={trending} />
       </div>
 
       <div>
         <p className="text-xl">Declining</p>
-        <ul>
-          {declining.map(game => <li key={game.bgg_id}>{game.name}</li>)}
-        </ul>
+
+        <BoardgameTable boardgames={declining} />
       </div>
 
     </div>

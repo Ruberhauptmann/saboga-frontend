@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Browse from "./routes/browse.tsx";
+import Browse from "./routes/browseBoardgames.tsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./routes/errors.tsx";
@@ -10,12 +10,20 @@ import BaseLayout from "./layouts/base.tsx";
 import {
   boardgameListLoader,
   boardgameLoader,
+  categoryLoader,
   designerGraphLoader,
+  designerLoader,
+  familyLoader,
+  mechanicLoader,
   search,
   trendingAndDecliningGamesLoader,
 } from "./functions/apiService.tsx";
 import SearchResults from "./routes/searchResults.tsx";
-import Designer from "./routes/designers.tsx";
+import Designer from "./routes/designer.tsx";
+import DesignerGraph from "./routes/designer_graph.tsx";
+import Category from "./routes/category.tsx";
+import Mechanic from "./routes/mechanic.tsx";
+import Family from "./routes/family.tsx";
 
 const router = createBrowserRouter([
   {
@@ -53,9 +61,29 @@ const router = createBrowserRouter([
         loader: boardgameLoader,
       },
       {
-        path: "/designers",
-        element: <Designer />,
+        path: "/network/designers",
+        element: <DesignerGraph />,
         loader: designerGraphLoader,
+      },
+      {
+        path: "/designer/:designerId",
+        element: <Designer />,
+        loader: designerLoader,
+      },
+      {
+        path: "/category/:categoryId",
+        element: <Category />,
+        loader: categoryLoader,
+      },
+      {
+        path: "/mechanic/:mechanicId",
+        element: <Mechanic />,
+        loader: mechanicLoader,
+      },
+      {
+        path: "/family/:familyId",
+        element: <Family />,
+        loader: familyLoader,
       },
       {
         path: "/search",

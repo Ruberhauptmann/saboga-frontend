@@ -1,0 +1,103 @@
+import { useLoaderData, useNavigate } from "react-router-dom";
+import type { components } from "../apischema";
+import Graph from "graphology";
+import {
+  SigmaContainer,
+  useLoadGraph,
+  useRegisterEvents,
+  useSigma,
+} from "@react-sigma/core";
+import { useEffect } from "react";
+import "@react-sigma/core/lib/style.css";
+
+type DesignerGraphData = components["schemas"]["DesignerNetwork"];
+
+export function NodeHoverCursor() {
+  const sigma = useSigma();
+  const registerEvents = useRegisterEvents();
+
+  useEffect(() => {
+    registerEvents({
+      enterNode: () => {
+        sigma.getContainer().style.cursor = "pointer";
+      },
+      leaveNode: () => {
+        sigma.getContainer().style.cursor = "default";
+      },
+    });
+  }, [sigma, registerEvents]);
+
+  return null;
+}
+
+
+function GraphEvents() {
+  const registerEvents = useRegisterEvents();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    registerEvents({
+      clickNode: (event) => {
+        const nodeId = event.node;
+
+        navigate(`/designer/${nodeId}`);
+      },
+    });
+  }, [registerEvents, navigate]);
+
+  return null;
+}
+
+function LoadGraph({ data }: { data: DesignerGraphData }) {
+  const loadGraph = useLoadGraph();
+
+  useEffect(() => {
+    const graph = new Graph();
+    data.nodes.forEach((n) => {
+      graph.addNode(String(n.id), {
+        label: n.label,
+        size: n.size ?? 5,
+        x: n.x,
+        y: n.y,
+        cluster: n.cluster ?? 0,
+      });
+    });
+    data.edges.forEach((e) => {
+      graph.addEdge(String(e.source), String(e.target), { size: e.size });
+    });
+
+    loadGraph(graph);
+  }, [data, loadGraph]);
+
+  return null;
+}
+
+export default function DesignerGraph() {
+  const designer_graph_data = useLoaderData() as DesignerGraphData;
+
+  return (
+    <div className="h-screen">
+      <div className="flex-1 h-full w-full">
+        <SigmaContainer
+          settings={{
+            nodeReducer: (node, data) => {
+              return {
+                ...data,
+                color:
+                  data.cluster === -1
+                    ? "#999999" // isolated designers = gray
+                    : ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3"][
+                        data.cluster % 4
+                      ],
+              };
+            },
+          }}
+        >
+          <LoadGraph data={designer_graph_data} />
+          <GraphEvents />
+          <NodeHoverCursor />
+        </SigmaContainer>
+      </div>
+    </div>
+  );
+}
