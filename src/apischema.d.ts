@@ -212,6 +212,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/categories/{bgg_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read Category */
+        get: operations["read_category_categories__bgg_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/designers": {
         parameters: {
             query?: never;
@@ -246,6 +263,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/designers/{bgg_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read Designer */
+        get: operations["read_designer_designers__bgg_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/families": {
         parameters: {
             query?: never;
@@ -263,6 +297,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/families/{bgg_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read Family */
+        get: operations["read_family_families__bgg_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/mechanics": {
         parameters: {
             query?: never;
@@ -272,6 +323,23 @@ export interface paths {
         };
         /** Read All Mechanics */
         get: operations["read_all_mechanics_mechanics_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/mechanics/{bgg_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read Mechanic */
+        get: operations["read_mechanic_mechanics__bgg_id__get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -351,6 +419,14 @@ export interface components {
             bgg_geek_rating?: number | null;
             /** Bgg Average Rating */
             bgg_average_rating?: number | null;
+            /** Bgg Rank Trend */
+            bgg_rank_trend?: number | null;
+            /** Bgg Geek Rating Trend */
+            bgg_geek_rating_trend?: number | null;
+            /** Bgg Average Rating Trend */
+            bgg_average_rating_trend?: number | null;
+            /** Mean Trend */
+            mean_trend?: number | null;
             /** Bgg Rank Change */
             bgg_rank_change?: number | null;
             /** Bgg Geek Rating Change */
@@ -388,6 +464,14 @@ export interface components {
             bgg_geek_rating?: number | null;
             /** Bgg Average Rating */
             bgg_average_rating?: number | null;
+            /** Bgg Rank Trend */
+            bgg_rank_trend?: number | null;
+            /** Bgg Geek Rating Trend */
+            bgg_geek_rating_trend?: number | null;
+            /** Bgg Average Rating Trend */
+            bgg_average_rating_trend?: number | null;
+            /** Mean Trend */
+            mean_trend?: number | null;
             /**
              * Categories
              * @default []
@@ -432,6 +516,8 @@ export interface components {
         DesignerEdge: {
             /** Id */
             id: string;
+            /** Label */
+            label: string;
             /** Source */
             source: string;
             /** Target */
@@ -458,6 +544,8 @@ export interface components {
             y: number;
             /** Size */
             size: number;
+            /** Cluster */
+            cluster: number;
         };
         /** Family */
         Family: {
@@ -666,7 +754,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BoardgameSingle"][];
+                    "application/json": components["schemas"]["BoardgameInList"][];
                 };
             };
             /** @description Not found */
@@ -693,7 +781,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BoardgameSingle"][];
+                    "application/json": components["schemas"]["BoardgameInList"][];
                 };
             };
             /** @description Not found */
@@ -890,9 +978,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
+                    "application/json": components["schemas"]["Category"][];
                 };
             };
             /** @description Not found */
@@ -901,6 +987,44 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    read_category_categories__bgg_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                bgg_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Category"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
             };
         };
     };
@@ -958,6 +1082,44 @@ export interface operations {
             };
         };
     };
+    read_designer_designers__bgg_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                bgg_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Designer"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     read_all_families_families_get: {
         parameters: {
             query?: never;
@@ -973,9 +1135,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
+                    "application/json": components["schemas"]["Family"][];
                 };
             };
             /** @description Not found */
@@ -984,6 +1144,44 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    read_family_families__bgg_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                bgg_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Family"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
             };
         };
     };
@@ -1002,9 +1200,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
+                    "application/json": components["schemas"]["Mechanic"][];
                 };
             };
             /** @description Not found */
@@ -1013,6 +1209,44 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    read_mechanic_mechanics__bgg_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                bgg_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Mechanic"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
             };
         };
     };
