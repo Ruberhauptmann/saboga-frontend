@@ -81,6 +81,7 @@ export default function DesignerGraph() {
         <SigmaContainer
           settings={{
             nodeReducer: (node, data) => {
+              console.log(node)
               return {
                 ...data,
                 color:
