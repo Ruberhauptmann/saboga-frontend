@@ -5,7 +5,7 @@ type NavElementsProps = {
     tabIndex?: number;
 };
 
-export default function NavElements({ className, tabIndex }: NavElementsProps) {
+export default function NavElements({ className }: NavElementsProps) {
   return (
     <ul className={`${className} overflow-visible`}>
       <li>
