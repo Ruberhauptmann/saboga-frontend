@@ -10,7 +10,7 @@ import {
 import { useEffect } from "react";
 import "@react-sigma/core/lib/style.css";
 
-type DesignerGraphData = components["schemas"]["DesignerNetwork"];
+type Network = components["schemas"]["Network"];
 
 export function NodeHoverCursor() {
   const sigma = useSigma();
@@ -30,7 +30,6 @@ export function NodeHoverCursor() {
   return null;
 }
 
-
 function GraphEvents() {
   const registerEvents = useRegisterEvents();
   const navigate = useNavigate();
@@ -40,7 +39,7 @@ function GraphEvents() {
       clickNode: (event) => {
         const nodeId = event.node;
 
-        navigate(`/designer/${nodeId}`);
+        navigate(`/family/${nodeId}`);
       },
     });
   }, [registerEvents, navigate]);
@@ -48,7 +47,7 @@ function GraphEvents() {
   return null;
 }
 
-function LoadGraph({ data }: { data: DesignerGraphData }) {
+function LoadGraph({ data }: { data: Network }) {
   const loadGraph = useLoadGraph();
 
   useEffect(() => {
@@ -63,7 +62,10 @@ function LoadGraph({ data }: { data: DesignerGraphData }) {
       });
     });
     data.edges.forEach((e) => {
-      graph.addEdge(String(e.source), String(e.target), { size: e.size });
+      graph.addEdge(String(e.source), String(e.target), {
+        size: e.size,
+        label: e.label,
+      });
     });
 
     loadGraph(graph);
@@ -72,8 +74,8 @@ function LoadGraph({ data }: { data: DesignerGraphData }) {
   return null;
 }
 
-export default function DesignerGraph() {
-  const designer_graph_data = useLoaderData() as DesignerGraphData;
+export default function FamilyGraph() {
+  const family_graph_data = useLoaderData() as Network;
 
   return (
     <div className="h-screen">
@@ -81,7 +83,7 @@ export default function DesignerGraph() {
         <SigmaContainer
           settings={{
             nodeReducer: (node, data) => {
-              console.log(node)
+              console.log(node);
               return {
                 ...data,
                 color:
@@ -92,9 +94,11 @@ export default function DesignerGraph() {
                       ],
               };
             },
+            renderEdgeLabels: true,
+            edgeLabelSize: 20,
           }}
         >
-          <LoadGraph data={designer_graph_data} />
+          <LoadGraph data={family_graph_data} />
           <GraphEvents />
           <NodeHoverCursor />
         </SigmaContainer>

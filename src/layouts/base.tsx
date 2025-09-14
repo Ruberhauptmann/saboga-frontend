@@ -20,18 +20,32 @@ const navElements: NavItem[] = [
     label: "Browse",
     submenu: [
       { label: "Boardgames", to: "/browse/boardgame/" },
+      { label: "Categories", to: "/browse/categories" },
       { label: "Designers", to: "/browse/designers" },
+      { label: "Families", to: "/browse/families" },
+      { label: "Mechanics", to: "/browse/mechanics" },
     ],
   },
   {
     label: "Networks",
-    submenu: [{ label: "Designers", to: "/network/designers" }],
+    submenu: [
+      { label: "Boardgames", to: "/network/boardgames" },
+      { label: "Categories", to: "/network/categories" },
+      { label: "Designers", to: "/network/designers" },
+      { label: "Families", to: "/network/families" },
+      { label: "Mechanics", to: "/network/mechanics" },
+    ],
   },
 ];
 
 // --- helper to fetch search results through your apiService ---
-async function fetchSearchResults(query: string, limit = 5): Promise<SearchResult[]> {
-  const req = new Request(`http://localhost/search?query=${encodeURIComponent(query)}&limit=${limit}`);
+async function fetchSearchResults(
+  query: string,
+  limit = 5,
+): Promise<SearchResult[]> {
+  const req = new Request(
+    `http://localhost/search?query=${encodeURIComponent(query)}&limit=${limit}`,
+  );
   try {
     const { data } = await search({ request: req });
     return Array.isArray(data) ? (data as SearchResult[]) : [];
@@ -111,7 +125,7 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
   return (
     <div>
       {/* Navbar */}
-      <div className="navbar bg-base-100 shadow-sm relative z-50">
+      <div className="navbar bg-base-100 shadow-sm z-50">
         <div className="navbar-start">
           {/* Mobile hamburger + dropdown */}
           <div className={`dropdown ${mobileOpen ? "dropdown-open" : ""}`}>
@@ -129,7 +143,12 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h8m-8 6h16"
+                />
               </svg>
             </button>
 
@@ -146,7 +165,10 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
                       <ul>
                         {item.submenu.map((sub) => (
                           <li key={sub.to}>
-                            <NavLink to={sub.to} onClick={() => setMobileOpen(false)}>
+                            <NavLink
+                              to={sub.to}
+                              onClick={() => setMobileOpen(false)}
+                            >
                               {sub.label}
                             </NavLink>
                           </li>
@@ -160,11 +182,15 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
                       {item.label}
                     </NavLink>
                   </li>
-                )
+                ),
               )}
               <li className="mt-2">
                 <a href="https://boardgamegeek.com/" target="_blank">
-                  <img alt="powered by BGG logo" className="object-contain w-32" src="/powered_by_bgg.webp" />
+                  <img
+                    alt="powered by BGG logo"
+                    className="object-contain w-32"
+                    src="/powered_by_bgg.webp"
+                  />
                 </a>
               </li>
             </ul>
@@ -176,8 +202,8 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
           </Link>
 
           {/* Desktop menu */}
-          <div className="hidden md:block" ref={desktopMenuRef}>
-            <ul className="menu menu-horizontal px-1">
+          <div className="navbar hidden md:block" ref={desktopMenuRef}>
+            <ul className="navbar-start menu menu-horizontal px-1">
               {navElements.map((item) =>
                 item.submenu ? (
                   <li
@@ -188,7 +214,9 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
                       type="button"
                       className="btn btn-ghost rounded-none"
                       onClick={() =>
-                        setDesktopOpen((v) => (v === item.label ? null : item.label))
+                        setDesktopOpen((v) =>
+                          v === item.label ? null : item.label,
+                        )
                       }
                       aria-haspopup="menu"
                       aria-expanded={desktopOpen === item.label}
@@ -202,7 +230,10 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
                     >
                       {item.submenu.map((sub) => (
                         <li key={sub.to}>
-                          <NavLink to={sub.to} onClick={() => setDesktopOpen(null)}>
+                          <NavLink
+                            to={sub.to}
+                            onClick={() => setDesktopOpen(null)}
+                          >
                             {sub.label}
                           </NavLink>
                         </li>
@@ -213,24 +244,26 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
                   <li key={item.label}>
                     <NavLink to={item.to!}>{item.label}</NavLink>
                   </li>
-                )
+                ),
               )}
             </ul>
           </div>
         </div>
 
+        <div className="navbar-center"></div>
+
         {/* Search */}
-        <div className="navbar-end w-2/3 relative">
+        <div className="navbar-end">
           <form onSubmit={handleSubmit} className="w-full">
             <div className="relative">
               <input
                 type="search"
-                className="input input-bordered w-full pl-10"
+                className="input input-bordered w-full max-w-96 pl-10"
                 placeholder="Search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onFocus={() => results.length > 0 && setShowResults(true)}
-                onBlur={() => setTimeout(() => setShowResults(false), 120)} // allow click
+                onBlur={() => setTimeout(() => setShowResults(false), 120)}
                 aria-label="Search games"
               />
               <svg
@@ -238,7 +271,13 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
               >
-                <g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor">
+                <g
+                  strokeLinejoin="round"
+                  strokeLinecap="round"
+                  strokeWidth="2.5"
+                  fill="none"
+                  stroke="currentColor"
+                >
                   <circle cx="11" cy="11" r="8"></circle>
                   <path d="m21 21-4.3-4.3"></path>
                 </g>
@@ -263,7 +302,11 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
 
           <div className="hidden md:block h-full ml-4">
             <a href="https://boardgamegeek.com/" target="_blank">
-              <img alt="powered by BGG logo" className="object-contain w-32" src="/powered_by_bgg.webp" />
+              <img
+                alt="powered by BGG logo"
+                className="object-contain w-32"
+                src="/powered_by_bgg.webp"
+              />
             </a>
           </div>
         </div>
@@ -279,9 +322,18 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
       <footer className="footer footer-center pt-0.5 p-10">
         <aside>
           <p>
-            made with <a href="https://react.dev/" className="link link-hover">React</a>,{" "}
-            <a href="https://tailwindcss.com" className="link link-hover">TailwindCSS</a>, and{" "}
-            <a href="https://daisyui.com/" className="link link-hover">DaisyUI</a>
+            made with{" "}
+            <a href="https://react.dev/" className="link link-hover">
+              React
+            </a>
+            ,{" "}
+            <a href="https://tailwindcss.com" className="link link-hover">
+              TailwindCSS
+            </a>
+            , and{" "}
+            <a href="https://daisyui.com/" className="link link-hover">
+              DaisyUI
+            </a>
           </p>
         </aside>
       </footer>

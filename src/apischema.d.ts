@@ -92,6 +92,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/boardgames/clusters": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read Boardgame Clusters */
+        get: operations["read_boardgame_clusters_boardgames_clusters_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/boardgames/{bgg_id}": {
         parameters: {
             query?: never;
@@ -212,6 +229,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/categories/clusters": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read Category Clusters */
+        get: operations["read_category_clusters_categories_clusters_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/categories/{bgg_id}": {
         parameters: {
             query?: never;
@@ -289,6 +323,23 @@ export interface paths {
         };
         /** Read All Families */
         get: operations["read_all_families_families_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/families/clusters": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read Family Clusters */
+        get: operations["read_family_clusters_families_clusters_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -505,6 +556,15 @@ export interface components {
             /** Bgg Id */
             bgg_id: number;
         };
+        /** CategoryWithBoardgames */
+        CategoryWithBoardgames: {
+            /** Name */
+            name: string;
+            /** Bgg Id */
+            bgg_id: number;
+            /** Boardgames */
+            boardgames: components["schemas"]["BoardgameInList"][];
+        };
         /** Designer */
         Designer: {
             /** Name */
@@ -512,8 +572,17 @@ export interface components {
             /** Bgg Id */
             bgg_id: number;
         };
-        /** DesignerEdge */
-        DesignerEdge: {
+        /** DesignerWithBoardgames */
+        DesignerWithBoardgames: {
+            /** Name */
+            name: string;
+            /** Bgg Id */
+            bgg_id: number;
+            /** Boardgames */
+            boardgames: components["schemas"]["BoardgameInList"][];
+        };
+        /** Edge */
+        Edge: {
             /** Id */
             id: string;
             /** Label */
@@ -525,34 +594,21 @@ export interface components {
             /** Size */
             size: number;
         };
-        /** DesignerNetwork */
-        DesignerNetwork: {
-            /** Nodes */
-            nodes: components["schemas"]["DesignerNode"][];
-            /** Edges */
-            edges: components["schemas"]["DesignerEdge"][];
-        };
-        /** DesignerNode */
-        DesignerNode: {
-            /** Id */
-            id: string;
-            /** Label */
-            label: string;
-            /** X */
-            x: number;
-            /** Y */
-            y: number;
-            /** Size */
-            size: number;
-            /** Cluster */
-            cluster: number;
-        };
         /** Family */
         Family: {
             /** Name */
             name: string;
             /** Bgg Id */
             bgg_id: number;
+        };
+        /** FamilyWithBoardgames */
+        FamilyWithBoardgames: {
+            /** Name */
+            name: string;
+            /** Bgg Id */
+            bgg_id: number;
+            /** Boardgames */
+            boardgames: components["schemas"]["BoardgameInList"][];
         };
         /** ForecastData */
         ForecastData: {
@@ -572,6 +628,37 @@ export interface components {
             name: string;
             /** Bgg Id */
             bgg_id: number;
+        };
+        /** MechanicWithBoardgames */
+        MechanicWithBoardgames: {
+            /** Name */
+            name: string;
+            /** Bgg Id */
+            bgg_id: number;
+            /** Boardgames */
+            boardgames: components["schemas"]["BoardgameInList"][];
+        };
+        /** Network */
+        Network: {
+            /** Nodes */
+            nodes: components["schemas"]["Node"][];
+            /** Edges */
+            edges: components["schemas"]["Edge"][];
+        };
+        /** Node */
+        Node: {
+            /** Id */
+            id: string;
+            /** Label */
+            label: string;
+            /** X */
+            x: number;
+            /** Y */
+            y: number;
+            /** Size */
+            size: number;
+            /** Cluster */
+            cluster: number;
         };
         /** Prediction */
         Prediction: {
@@ -622,6 +709,8 @@ export interface components {
             bgg_id: number;
             /** Name */
             name: string;
+            /** Type */
+            type: string;
         };
         /** ValidationError */
         ValidationError: {
@@ -782,6 +871,33 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BoardgameInList"][];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    read_boardgame_clusters_boardgames_clusters_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Network"];
                 };
             };
             /** @description Not found */
@@ -965,7 +1081,10 @@ export interface operations {
     };
     read_all_categories_categories_get: {
         parameters: {
-            query?: never;
+            query?: {
+                page?: number;
+                per_page?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -979,6 +1098,42 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Category"][];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    read_category_clusters_categories_clusters_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Network"];
                 };
             };
             /** @description Not found */
@@ -1007,7 +1162,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Category"];
+                    "application/json": components["schemas"]["CategoryWithBoardgames"];
                 };
             };
             /** @description Not found */
@@ -1030,7 +1185,10 @@ export interface operations {
     };
     read_all_designers_designers_get: {
         parameters: {
-            query?: never;
+            query?: {
+                page?: number;
+                per_page?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -1053,6 +1211,15 @@ export interface operations {
                 };
                 content?: never;
             };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
         };
     };
     read_designer_clusters_designers_clusters_get: {
@@ -1070,7 +1237,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DesignerNetwork"];
+                    "application/json": components["schemas"]["Network"];
                 };
             };
             /** @description Not found */
@@ -1099,7 +1266,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Designer"];
+                    "application/json": components["schemas"]["DesignerWithBoardgames"];
                 };
             };
             /** @description Not found */
@@ -1122,7 +1289,10 @@ export interface operations {
     };
     read_all_families_families_get: {
         parameters: {
-            query?: never;
+            query?: {
+                page?: number;
+                per_page?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -1136,6 +1306,42 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Family"][];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    read_family_clusters_families_clusters_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Network"];
                 };
             };
             /** @description Not found */
@@ -1164,7 +1370,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Family"];
+                    "application/json": components["schemas"]["FamilyWithBoardgames"];
                 };
             };
             /** @description Not found */
@@ -1187,7 +1393,10 @@ export interface operations {
     };
     read_all_mechanics_mechanics_get: {
         parameters: {
-            query?: never;
+            query?: {
+                page?: number;
+                per_page?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -1210,6 +1419,15 @@ export interface operations {
                 };
                 content?: never;
             };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
         };
     };
     read_mechanic_mechanics__bgg_id__get: {
@@ -1229,7 +1447,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Mechanic"];
+                    "application/json": components["schemas"]["MechanicWithBoardgames"];
                 };
             };
             /** @description Not found */
