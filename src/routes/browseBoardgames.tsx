@@ -7,7 +7,7 @@ import { components } from "../apischema";
 
 type BoardgameInList= components["schemas"]["BoardgameInList"];
 
-function Browse() {
+function BrowseBoardgames() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigation = useNavigation();
 
@@ -130,7 +130,7 @@ function Browse() {
 
       <BoardgameTable boardgames={boardgames} />
     </div>
-  );
-}
+  )
+};
 
-export default Browse;
+export default BrowseBoardgames;

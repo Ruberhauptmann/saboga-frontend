@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Browse from "./routes/browseBoardgames.tsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./routes/errors.tsx";
@@ -8,22 +7,33 @@ import Boardgame from "./routes/boardgame.tsx";
 import Home from "./routes/home.tsx";
 import BaseLayout from "./layouts/base.tsx";
 import {
+  boardgameGraphLoader,
   boardgameListLoader,
   boardgameLoader,
+  categoryGraphLoader,
   categoryLoader,
   designerGraphLoader,
+  designerListLoader,
   designerLoader,
+  familyGraphLoader,
   familyLoader,
+  mechanicGraphLoader,
   mechanicLoader,
   search,
   trendingAndDecliningGamesLoader,
 } from "./functions/apiService.tsx";
 import SearchResults from "./routes/searchResults.tsx";
 import Designer from "./routes/designer.tsx";
-import DesignerGraph from "./routes/designer_graph.tsx";
+import DesignerGraph from "./routes/designerGraph.tsx";
 import Category from "./routes/category.tsx";
 import Mechanic from "./routes/mechanic.tsx";
 import Family from "./routes/family.tsx";
+import BrowseBoardgames from "./routes/browseBoardgames.tsx";
+import BrowseDesigner from "./routes/browseDesigners.tsx";
+import BoardgameGraph from "./routes/boardgameGraph.tsx";
+import CategoryGraph from "./routes/categoryGraph.tsx";
+import FamilyGraph from "./routes/familyGraph.tsx";
+import MechanicGraph from "./routes/mechanicGraph.tsx";
 
 const router = createBrowserRouter([
   {
@@ -38,22 +48,27 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
-        loader: trendingAndDecliningGamesLoader
+        loader: trendingAndDecliningGamesLoader,
       },
       {
         path: "/browse/boardgame/",
-        element: <Browse />,
-        loader: boardgameListLoader,
-      },
-      {
-        path: "/browse/boardgame/",
-        element: <Browse />,
+        element: <BrowseBoardgames />,
         loader: boardgameListLoader,
       },
       {
         path: "/browse/boardgame/page/:pageId",
-        element: <Browse />,
+        element: <BrowseBoardgames />,
         loader: boardgameListLoader,
+      },
+      {
+        path: "/network/boardgames",
+        element: <BoardgameGraph />,
+        loader: boardgameGraphLoader,
+      },
+      {
+        path: "/browse/designers/",
+        element: <BrowseDesigner />,
+        loader: designerListLoader,
       },
       {
         path: "/boardgame/:boardgameId",
@@ -71,6 +86,11 @@ const router = createBrowserRouter([
         loader: designerLoader,
       },
       {
+        path: "/network/categories",
+        element: <CategoryGraph />,
+        loader: categoryGraphLoader,
+      },
+      {
         path: "/category/:categoryId",
         element: <Category />,
         loader: categoryLoader,
@@ -79,6 +99,16 @@ const router = createBrowserRouter([
         path: "/mechanic/:mechanicId",
         element: <Mechanic />,
         loader: mechanicLoader,
+      },
+      {
+        path: "/network/mechanics",
+        element: <MechanicGraph />,
+        loader: mechanicGraphLoader,
+      },
+      {
+        path: "/network/families",
+        element: <FamilyGraph />,
+        loader: familyGraphLoader,
       },
       {
         path: "/family/:familyId",
