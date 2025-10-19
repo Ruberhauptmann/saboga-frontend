@@ -134,6 +134,10 @@ export interface paths {
          *
          *     Returns:
          *         BoardgameSingle: Boardgame.
+         *
+         *     Parameters
+         *     ----------
+         *     db_session
          */
         get: operations["read_game_boardgames__bgg_id__get"];
         put?: never;
@@ -374,6 +378,23 @@ export interface paths {
         };
         /** Read All Mechanics */
         get: operations["read_all_mechanics_mechanics_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/mechanics/clusters": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read Mechanic Clusters */
+        get: operations["read_mechanic_clusters_mechanics_clusters_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1427,6 +1448,33 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
                 };
+            };
+        };
+    };
+    read_mechanic_clusters_mechanics_clusters_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Network"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
