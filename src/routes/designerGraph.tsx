@@ -7,7 +7,7 @@ import {
   useRegisterEvents,
   useSigma,
 } from "@react-sigma/core";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "@react-sigma/core/lib/style.css";
 
 type Network = components["schemas"]["Network"];
@@ -38,8 +38,7 @@ function GraphEvents() {
     registerEvents({
       clickNode: (event) => {
         const nodeId = event.node;
-
-        navigate(`/designer/${nodeId}`);
+        navigate(`/mechanic/${nodeId}`);
       },
     });
   }, [registerEvents, navigate]);
@@ -52,6 +51,7 @@ function LoadGraph({ data }: { data: Network }) {
 
   useEffect(() => {
     const graph = new Graph();
+
     data.nodes.forEach((n) => {
       graph.addNode(String(n.id), {
         label: n.label,
@@ -61,6 +61,7 @@ function LoadGraph({ data }: { data: Network }) {
         cluster: n.cluster ?? 0,
       });
     });
+
     data.edges.forEach((e) => {
       graph.addEdge(String(e.source), String(e.target), {
         size: e.size,
@@ -74,35 +75,84 @@ function LoadGraph({ data }: { data: Network }) {
   return null;
 }
 
+/**
+ * Highlights hovered node and neighbors while greying out unrelated nodes/edges
+ */
+function HoverNeighborhood() {
+  const sigma = useSigma();
+  const registerEvents = useRegisterEvents();
+  const graph = sigma.getGraph();
+
+  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+  const [neighbors, setNeighbors] = useState<Set<string> | null>(null);
+
+  useEffect(() => {
+    registerEvents({
+      enterNode: ({ node }) => {
+        setHoveredNode(node);
+        setNeighbors(new Set(graph.neighbors(node)));
+      },
+      leaveNode: () => {
+        setHoveredNode(null);
+        setNeighbors(null);
+      },
+    });
+  }, [graph, registerEvents]);
+
+  useEffect(() => {
+    sigma.setSetting("nodeReducer", (node, data) => {
+      const baseColor =
+        data.cluster === -1
+          ? "#999999"
+          : ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3"][data.cluster % 4];
+
+      if (!hoveredNode) return { ...data, color: baseColor };
+
+      if (node === hoveredNode || neighbors?.has(node)) {
+        return { ...data, color: baseColor }; // keep cluster color
+      }
+
+      return { ...data, color: "#eee" }; // grey out unrelated nodes
+    });
+
+    sigma.setSetting("edgeReducer", (edge, data) => {
+      if (!hoveredNode) return data;
+
+      const [source, target] = graph.extremities(edge);
+      if (
+        source === hoveredNode ||
+        target === hoveredNode ||
+        neighbors?.has(source) ||
+        neighbors?.has(target)
+      ) {
+        return data; // keep edge visible
+      }
+
+      return { ...data, hidden: true }; // hide unrelated edges
+    });
+
+    sigma.refresh({ skipIndexation: true });
+  }, [hoveredNode, neighbors, graph, sigma]);
+
+  return null;
+}
+
 export default function DesignerGraph() {
   const designer_graph_data = useLoaderData() as Network;
 
   return (
     <div className="h-screen">
-      <div className="flex-1 h-full w-full">
-        <SigmaContainer
-          settings={{
-            nodeReducer: (node, data) => {
-              console.log(node);
-              return {
-                ...data,
-                color:
-                  data.cluster === -1
-                    ? "#999999" // isolated designers = gray
-                    : ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3"][
-                        data.cluster % 4
-                      ],
-              };
-            },
-            renderEdgeLabels: true,
-            edgeLabelSize: 20,
-          }}
-        >
-          <LoadGraph data={designer_graph_data} />
-          <GraphEvents />
-          <NodeHoverCursor />
-        </SigmaContainer>
-      </div>
+      <SigmaContainer
+        settings={{
+          renderLabels: false,
+          renderEdgeLabels: false,
+        }}
+      >
+        <LoadGraph data={designer_graph_data} />
+        <GraphEvents />
+        <NodeHoverCursor />
+        <HoverNeighborhood />
+      </SigmaContainer>
     </div>
   );
 }
