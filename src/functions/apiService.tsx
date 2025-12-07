@@ -112,10 +112,19 @@ export const forecastLoader = async ({
 };
 
 /**
- * Designer list + graph
+ * Lists and graphs
  */
+export const categoriesListLoader = async () =>
+  (await fetchFromApi("/categories")).data;
+
 export const designerListLoader = async () =>
   (await fetchFromApi("/designers")).data;
+
+export const familiesListLoader = async () =>
+  (await fetchFromApi("/families")).data;
+
+export const mechanicsListLoader = async () =>
+  (await fetchFromApi("/mechanics")).data;
 
 export const categoryGraphLoader = async () =>
   (await fetchFromApi("/categories/clusters")).data;
