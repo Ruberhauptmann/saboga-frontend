@@ -1,9 +1,10 @@
 import type { components } from "../apischema";
 import {
+  Link,
   useLoaderData,
 } from "react-router-dom";
 
-type Designer = components["schemas"]["Designer"];
+type Designer = components["schemas"]["DesignerWithBoardgames"];
 
 function Designer() {
   const designer = useLoaderData() as Designer;
@@ -16,7 +17,10 @@ function Designer() {
         {designer.name}{" "}
       </h1>
 
-
+      Games:
+      {designer.boardgames!.map((game) => (
+          <Link to={`/boardgame/${game.bgg_id}`}><h1 className="text-3xl">{game.name}</h1></Link>
+      ))}
     </div>
   );
 }

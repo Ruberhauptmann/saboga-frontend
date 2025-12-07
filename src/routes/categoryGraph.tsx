@@ -38,7 +38,7 @@ function GraphEvents() {
     registerEvents({
       clickNode: (event) => {
         const nodeId = event.node;
-        navigate(`/mechanic/${nodeId}`);
+        navigate(`/category/${nodeId}`);
       },
     });
   }, [registerEvents, navigate]);

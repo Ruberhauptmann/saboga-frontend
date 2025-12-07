@@ -1,5 +1,6 @@
 import type { components } from "../apischema";
 import {
+  Link,
   useLoaderData,
 } from "react-router-dom";
 
@@ -12,7 +13,7 @@ function BrowseDesigners() {
     <div>
       {designers!.map((designer) => (
         <h1 className="text-3xl">
-          {designer.name}{" "}
+          <Link to={`/designer/${designer.bgg_id}`}><h1 className="text-3xl">{designer.name}</h1></Link>
         </h1>
       ))}
     </div>

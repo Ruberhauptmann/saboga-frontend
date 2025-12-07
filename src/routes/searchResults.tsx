@@ -11,13 +11,13 @@ export default function SearchResults() {
       {data.length === 0 ? (
         <p>No results found.</p>
       ) : (
-        data.map((game: SearchResult) => (
-          <div key={game.bgg_id} className="border p-4 rounded">
+        data.map((result: SearchResult) => (
+          <div key={result.bgg_id} className="border p-4 rounded">
             <Link
-              to={`/boardgame/${game.bgg_id}`}
+              to={`/${result.type}/${result.bgg_id}`}
               className="text-lg font-semibold"
             >
-              {game.name}
+              {result.name}
             </Link>
           </div>
         ))

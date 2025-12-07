@@ -10,15 +10,18 @@ import {
   boardgameGraphLoader,
   boardgameListLoader,
   boardgameLoader,
+  categoriesListLoader,
   categoryGraphLoader,
   categoryLoader,
   designerGraphLoader,
   designerListLoader,
   designerLoader,
+  familiesListLoader,
   familyGraphLoader,
   familyLoader,
   mechanicGraphLoader,
   mechanicLoader,
+  mechanicsListLoader,
   search,
   trendingAndDecliningGamesLoader,
 } from "./functions/apiService.tsx";
@@ -34,6 +37,9 @@ import BoardgameGraph from "./routes/boardgameGraph.tsx";
 import CategoryGraph from "./routes/categoryGraph.tsx";
 import FamilyGraph from "./routes/familyGraph.tsx";
 import MechanicGraph from "./routes/mechanicGraph.tsx";
+import BrowseFamilies from "./routes/browseFamilies.tsx";
+import BrowseCategories from "./routes/browseCategories.tsx";
+import BrowseMechanics from "./routes/browseMechanics.tsx";
 
 const router = createBrowserRouter([
   {
@@ -66,9 +72,24 @@ const router = createBrowserRouter([
         loader: boardgameGraphLoader,
       },
       {
+        path: "/browse/categories/",
+        element: <BrowseCategories />,
+        loader: categoriesListLoader,
+      },
+      {
         path: "/browse/designers/",
         element: <BrowseDesigner />,
         loader: designerListLoader,
+      },
+      {
+        path: "/browse/families/",
+        element: <BrowseFamilies />,
+        loader: familiesListLoader,
+      },
+      {
+        path: "/browse/mechanics/",
+        element: <BrowseMechanics />,
+        loader: mechanicsListLoader,
       },
       {
         path: "/boardgame/:boardgameId",

@@ -254,8 +254,8 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
 
         {/* Search */}
         <div className="navbar-end">
-          <form onSubmit={handleSubmit} className="w-full">
-            <div className="relative">
+          <div className="relative">
+          <form onSubmit={handleSubmit}>
               <input
                 type="search"
                 className="input input-bordered w-full max-w-96 pl-10"
@@ -282,25 +282,25 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
                   <path d="m21 21-4.3-4.3"></path>
                 </g>
               </svg>
-            </div>
-
             {suggestionsVisible && (
               <ul className="absolute z-50 bg-base-100 shadow-md mt-1 w-full rounded-box max-h-60 overflow-y-auto">
-                {results.map((game) => (
-                  <li key={game.bgg_id} className="p-2 hover:bg-base-200">
+                {results.map((result) => (
+                  <li key={result.bgg_id} className="hover:bg-base-200">
                     <Link
-                      to={`/boardgame/${game.bgg_id}`}
+                      to={`/${result.type}/${result.bgg_id}`}
                       onClick={() => setShowResults(false)}
+                      className="block p-2"
                     >
-                      {game.name}
+                      {result.name}
                     </Link>
                   </li>
                 ))}
               </ul>
             )}
           </form>
+          </div>
 
-          <div className="hidden md:block h-full ml-4">
+          <div className="hidden md:block h-full mx-2">
             <a href="https://boardgamegeek.com/" target="_blank">
               <img
                 alt="powered by BGG logo"
