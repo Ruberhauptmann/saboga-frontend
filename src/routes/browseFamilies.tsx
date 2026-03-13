@@ -1,7 +1,7 @@
 import type { components } from "../apischema";
 import { Link, useLoaderData } from "react-router-dom";
 
-type Family = components["schemas"]["Family"];
+type Family = components["schemas"]["FamilyList"];
 
 function BrowseFamilies() {
   const families = useLoaderData() as Family[];

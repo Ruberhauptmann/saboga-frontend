@@ -2,7 +2,6 @@ import { Link, useRouteError } from "react-router-dom";
 
 export default function ErrorPage() {
   const error = useRouteError() as Response & { data?: string };
-
   const errorMessage = error?.data || "Unknown error occurred.";
 
   return (

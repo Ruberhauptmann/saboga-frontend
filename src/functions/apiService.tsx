@@ -1,6 +1,7 @@
 import type { Params } from "react-router-dom";
 import parseLinkHeader from "./parseLinkHeader.tsx";
 import fetchFromApi from "./apiBaseService.tsx";
+import { SearchResult } from "../types/search_result.ts";
 
 /**
  * Special loader for boardgame list (because it needs pagination + link headers)
@@ -13,6 +14,7 @@ export const boardgameListLoader = async ({
   params: Params<"pageId">;
 }) => {
   const queryParams: Record<string, string | number> = {};
+
   if (params.pageId) queryParams.page = Number(params.pageId);
 
   const url = new URL(request.url);
@@ -23,7 +25,8 @@ export const boardgameListLoader = async ({
     params: { query: queryParams },
   });
 
-  const links = parseLinkHeader(response.headers.get("link")!);
+  const links = parseLinkHeader(response.headers.get("link"));
+  console.log("Parsed links:", links);
   return { data, links };
 };
 
@@ -44,7 +47,7 @@ export const boardgameLoader = async ({
     if (v) queryParams[k] = v;
   });
 
-  const { data } = await fetchFromApi("/boardgames/{bgg_id}", {
+  const { data } = await fetchFromApi("/boardgames/{bgg_id}/", {
     params: {
       path: { bgg_id: Number(params.boardgameId!) },
       query: queryParams,
@@ -168,7 +171,7 @@ export const search = async ({ request }: { request: Request }) => {
       : {}),
   };
 
-  const { data } = await fetchFromApi("/search", {
+  const { data }: { data: SearchResult[] } = await fetchFromApi("/search", {
     params: { query: queryParams },
   });
 

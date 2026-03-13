@@ -4,7 +4,7 @@ import {
   useLoaderData,
 } from "react-router-dom";
 
-type Designer = components["schemas"]["Designer"];
+type Designer = components["schemas"]["DesignerList"];
 
 function BrowseDesigners() {
   const designers = useLoaderData() as Designer[];

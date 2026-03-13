@@ -1,4 +1,5 @@
-import type { components } from "../apischema.d.ts";
+
+import { useEffect, useMemo, useState } from "react";
 import { Line } from "react-chartjs-2";
 import {
   CategoryScale,
@@ -10,15 +11,14 @@ import {
   Title,
   Tooltip,
   TimeScale,
-  ChartDataset,
-  ChartData,
-  TooltipItem,
 } from "chart.js";
 import annotationPlugin from "chartjs-plugin-annotation";
 import "chartjs-adapter-date-fns";
 import { forecastLoader } from "../functions/apiService.tsx";
+import { getColors } from "../functions/getColors.tsx";
+import type { components } from "../apischema.d.ts";
 
-type Boardgame = components["schemas"]["BoardgameSingle"];
+type Boardgame = components["schemas"]["BoardgameDetail"];
 type Prediction = components["schemas"]["Prediction"];
 
 ChartJS.register(
@@ -32,247 +32,151 @@ ChartJS.register(
   annotationPlugin,
   TimeScale,
 );
-import { useEffect, useState } from "react";
-import { getColors } from "../functions/getColors.tsx";
 
 function BoardgameStatistics({
   boardgame,
   loadPrediction,
   start_date,
-  end_date
+  end_date,
 }: {
   boardgame: Boardgame;
   loadPrediction: boolean;
   start_date: string | undefined;
   end_date: string | undefined;
 }) {
-  const labels = boardgame.bgg_rank_history.map(
-    (entry) => new Date(entry.date),
-  );
-  const bggRankData = boardgame.bgg_rank_history.map((entry) => entry.bgg_rank);
-  const bggGeekRatingData = boardgame.bgg_rank_history.map(
-    (entry) => entry.bgg_geek_rating,
-  );
-  const bggAverageRatingData = boardgame.bgg_rank_history.map(
-    (entry) => entry.bgg_average_rating,
-  );
-
-  const last_date = labels[labels.length - 1]
-    ? labels[labels.length - 1]
-    : new Date();
-
+  const [predictionData, setPredictionData] = useState<Prediction[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const colors = getColors();
 
-  const [predictionData, setPredictionData] = useState<Prediction[]>([]);
+  // 1. Memoize historical data
+  const historical = useMemo(() => ({
+    labels: boardgame.bgg_rank_history.map((e) => new Date(e.date)),
+    ranks: boardgame.bgg_rank_history.map((e) => e.bgg_rank),
+    geek: boardgame.bgg_rank_history.map((e) => e.bgg_geek_rating),
+    avg: boardgame.bgg_rank_history.map((e) => e.bgg_average_rating),
+  }), [boardgame]);
 
-  const fetchPrediction = async () => {
-    try {
-      const data = await forecastLoader({
-        params: { boardgameId: boardgame.bgg_id.toString() },
-        searchParams: {start_date: start_date, end_date: end_date}
-      });
-      if (!data) {
-        console.error("Invalid prediction data");
-        setPredictionData([]);
-      } else {
-        setPredictionData(data.prediction);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const last_date = useMemo(() => 
+    historical.labels.length > 0 ? historical.labels[historical.labels.length - 1] : new Date(), 
+  [historical.labels]);
 
-  // Effect triggers when `loadPrediction` changes
+  // 2. Fetcher
   useEffect(() => {
-    if (loadPrediction) {
-      fetchPrediction();
-    }
-  }, [loadPrediction]);
+    if (!loadPrediction) return;
 
-  const rankDataSets: ChartDataset<"line">[] = [
-    {
-      label: "BGG Rank",
-      data: bggRankData,
-      borderColor: colors.secondary,
-      backgroundColor: colors.secondary,
-      tension: 0.1,
-    },
-  ];
+    const fetchPrediction = async () => {
+      setIsLoading(true);
+      try {
+        const data = await forecastLoader({
+          params: { boardgameId: boardgame.bgg_id.toString() },
+          searchParams: { start_date, end_date },
+        });
+        setPredictionData(data && Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("Fetch failed:", err);
+        setPredictionData([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchPrediction();
+  }, [loadPrediction, boardgame.bgg_id, start_date, end_date]);
 
-  let predictedRankData: (null | number)[] = [];
-  let predictedAverageRatingData: number[] = [];
-  let predictedGeekRatingData: number[] = [];
-  let predictedLabels: Date[] = [];
-  if (loadPrediction) {
-    predictedRankData = [
-      ...bggRankData.map(() => null),
-      ...predictionData.map((entry) => entry.bgg_rank),
+  const chartData = useMemo(() => {
+    const isReady = loadPrediction && predictionData.length > 0;
+  
+      // Combine everything into one single array
+    const combinedLabels = [
+      ...historical.labels,
+      ...(isReady ? predictionData.map((e) => new Date(e.date)) : []),
     ];
-    rankDataSets.push({
-      label: "BGG Rank (predicted)",
-      data: predictedRankData,
-      borderColor: colors.primary,
-      backgroundColor: colors.primary,
-      tension: 0.1,
-    });
 
-    predictedAverageRatingData = predictionData.map(
-      (entry) => entry.bgg_average_rating,
-    );
-    predictedGeekRatingData = predictionData.map(
-      (entry) => entry.bgg_geek_rating,
-    );
-    predictedLabels = predictionData.map((entry) => new Date(entry.date));
-  }
-  const fullLabels = [...labels, ...predictedLabels];
-  const fullAverageRatingData = [
-    ...bggAverageRatingData,
-    ...predictedAverageRatingData,
-  ];
-  const fullGeekRatingData = [...bggGeekRatingData, ...predictedGeekRatingData];
+    console.log(predictionData)
 
-  const rankData: ChartData<"line"> = {
-    labels: fullLabels,
-    datasets: rankDataSets,
-  };
+    const historyLength = historical.labels.length;
 
-  const ratingData = {
-    labels: fullLabels,
-    datasets: [
-      {
-        label: "BGG Geek Rating",
-        data: fullGeekRatingData,
-        borderColor: colors.primary,
-        backgroundColor: colors.primary,
-        yAxisID: "y1",
-        tension: 0.1,
+    return {
+      rank: {
+        labels: combinedLabels,
+        datasets: [
+          {
+            label: "BGG Rank",
+            // Single continuous array of numbers
+            data: [
+              ...historical.ranks,
+              ...(isReady ? predictionData.map((e) => e.bgg_rank) : []),
+            ],
+            borderColor: colors.secondary,
+            tension: 0.1,
+            pointRadius: (ctx: any) => (ctx.dataIndex < historyLength ? 2 : 0), // Hide prediction points if desired
+            // This is the magic part:
+            segment: {
+              borderColor: (ctx: any) =>
+                ctx.p0DataIndex >= historyLength - 1 ? colors.primary : undefined,
+              borderDash: (ctx: any) =>
+                ctx.p0DataIndex >= historyLength - 1 ? [5, 5] : undefined,
+            },
+          },
+        ],
       },
-      {
-        label: "BGG Average Rating",
-        data: fullAverageRatingData,
-        borderColor: colors.secondary,
-        backgroundColor: colors.secondary,
-        yAxisID: "y2",
-        tension: 0.1,
+      rating: {
+        labels: combinedLabels,
+        datasets: [
+          {
+            label: "Geek Rating",
+            data: [...historical.geek, ...(isReady ? predictionData.map(e => e.bgg_geek_rating) : [])],
+            yAxisID: "y1",
+            borderColor: colors.primary,
+            segment: {
+              borderDash: (ctx: any) => ctx.p0DataIndex >= historyLength - 1 ? [5, 5] : undefined,
+            },
+          },
+          {
+            label: "Avg Rating",
+            data: [...historical.avg, ...(isReady ? predictionData.map(e => e.bgg_average_rating) : [])],
+            yAxisID: "y2",
+            borderColor: colors.secondary,
+            segment: {
+              borderDash: (ctx: any) => ctx.p0DataIndex >= historyLength - 1 ? [5, 5] : undefined,
+            },
+          },
+        ],
       },
-    ],
-  };
+    };
+  }, [predictionData, historical, loadPrediction, colors]);
 
-  const rank_options = {
+  // 4. Memoize Options
+  const annotation = useMemo(() => ({
+    line1: {
+      type: "line" as const,
+      xMin: last_date.toISOString(),
+      xMax: last_date.toISOString(),
+      borderColor: "rgb(255, 99, 132)",
+      borderWidth: 2,
+      display: loadPrediction,
+    },
+  }), [last_date, loadPrediction]);
+
+  const rankOptions = useMemo(() => ({
     responsive: true,
     maintainAspectRatio: false,
-    type: "line",
-    scales: {
-      x: {
-        type: "time" as const,
-        time: {
-          unit: "day" as const,
-        },
-        title: {
-          display: true,
-          text: "Date",
-        },
-      },
-      y: {
-        type: "linear" as const,
-        title: {
-          display: true,
-          text: "Rank",
-        },
-        ticks: {
-          precision: 0,
-        },
-        beginAtZero: false,
-        reverse: true,
-      },
-    },
-    plugins: {
-      tooltip: {
-        callbacks: {
-          title: (tooltipItems: TooltipItem<"line">[]) => {
-            const date = tooltipItems[0].label;
-            return date.split(",").slice(0, 2).join(",");
-          },
-        },
-      },
-      annotation: {
-        annotations: {
-          line1: {
-            type: "line" as const,
-            xMin: last_date.toISOString(),
-            xMax: last_date.toISOString(),
-            borderColor: "rgb(255, 99, 132)",
-            borderWidth: 2,
-            display: loadPrediction,
-          },
-        },
-      },
-    },
-  };
+    scales: { x: { type: "time" as const }, y: { reverse: true } },
+    plugins: { annotation: { annotations: annotation } },
+  }), [annotation]);
 
-  const rating_options = {
+  const ratingOptions = useMemo(() => ({
     responsive: true,
     maintainAspectRatio: false,
-    scales: {
-      x: {
-        type: "time" as const,
-        title: {
-          display: true,
-          text: "Date",
-        },
-      },
-      y1: {
-        type: "linear" as const,
-        position: "left" as const,
-        title: {
-          display: true,
-          text: "Geek Rating",
-        },
-      },
-      y2: {
-        type: "linear" as const,
-        position: "right" as const,
-        title: {
-          display: true,
-          text: "Average Rating",
-        },
-        grid: {
-          drawOnChartArea: false,
-        },
-      },
-    },
-    plugins: {
-      tooltip: {
-        callbacks: {
-          title: (tooltipItems: TooltipItem<"line">[]) => {
-            const date = tooltipItems[0].label;
-            return date.split(",").slice(0, 2).join(",");
-          },
-        },
-      },
-      annotation: {
-        annotations: {
-          line1: {
-            type: "line" as const,
-            xMin: last_date.toISOString(),
-            xMax: last_date.toISOString(),
-            borderColor: "rgb(255, 99, 132)",
-            borderWidth: 2,
-            display: loadPrediction,
-          },
-        },
-      },
-    },
-  };
+    scales: { x: { type: "time" as const }, y1: { position: "left" as const }, y2: { position: "right" as const } },
+    plugins: { annotation: { annotations: annotation } },
+  }), [annotation]);
+
+  if (isLoading) return <div className="h-96 flex items-center justify-center">Loading forecast...</div>;
 
   return (
     <div className="w-full">
-      <div className="relative w-full h-96">
-        <Line options={rank_options} data={rankData} />
-      </div>
-      <div className="relative h-96">
-        <Line options={rating_options} data={ratingData} />
-      </div>
+      <div className="relative h-96"><Line data={chartData.rank} options={rankOptions} /></div>
+      <div className="relative h-96 mt-8"><Line data={chartData.rating} options={ratingOptions} /></div>
     </div>
   );
 }

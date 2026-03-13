@@ -4,7 +4,7 @@ import {
   useLoaderData,
 } from "react-router-dom";
 
-type Mechanic = components["schemas"]["MechanicWithBoardgames"];
+type Mechanic = components["schemas"]["MechanicDetail"];
 
 function Mechanic() {
   const mechanic = useLoaderData() as Mechanic;

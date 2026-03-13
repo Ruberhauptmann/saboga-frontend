@@ -4,7 +4,7 @@ import {
   useLoaderData,
 } from "react-router-dom";
 
-type Designer = components["schemas"]["DesignerWithBoardgames"];
+type Designer = components["schemas"]["DesignerDetail"];
 
 function Designer() {
   const designer = useLoaderData() as Designer;

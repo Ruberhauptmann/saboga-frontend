@@ -1,7 +1,6 @@
 import { Link, useLoaderData } from "react-router-dom";
 import type { components } from "../apischema";
-
-type SearchResult = components["schemas"]["SearchResult"];
+import { SearchResult } from "../types/search_result";
 
 export default function SearchResults() {
   const { data } = useLoaderData();
@@ -12,12 +11,12 @@ export default function SearchResults() {
         <p>No results found.</p>
       ) : (
         data.map((result: SearchResult) => (
-          <div key={result.bgg_id} className="border p-4 rounded">
+          <div key={result.data.bgg_id} className="border p-4 rounded">
             <Link
-              to={`/${result.type}/${result.bgg_id}`}
+              to={`/${result.type}/${result.data.bgg_id}`}
               className="text-lg font-semibold"
             >
-              {result.name}
+              {result.data.name}
             </Link>
           </div>
         ))
