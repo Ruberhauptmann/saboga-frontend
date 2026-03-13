@@ -3,7 +3,7 @@ import { components } from "../apischema";
 import BoardgameTable from "../components/boardgameTable";
 
 
-type BoardgameInList = components["schemas"]["BoardgameInList"];
+type BoardgameInList = components["schemas"]["BoardgameRankHistory"];
 type BoardgamesLoaderData = {
   trending: BoardgameInList[];
   declining: BoardgameInList[];
