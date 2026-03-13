@@ -4,7 +4,7 @@ import {
   useLoaderData,
 } from "react-router-dom";
 
-type Category = components["schemas"]["CategoryWithBoardgames"];
+type Category = components["schemas"]["CategoryDetail"];
 
 function Category() {
   const category = useLoaderData() as Category;

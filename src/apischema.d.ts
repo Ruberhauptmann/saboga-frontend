@@ -4,15 +4,14 @@
  */
 
 export interface paths {
-    "/boardgames": {
+    "/boardgames/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Read All Games */
-        get: operations["read_all_games_boardgames_get"];
+        get: operations["boardgames_list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -21,7 +20,183 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/boardgames/rank-history": {
+    "/boardgames/{bgg_id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["boardgames_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/boardgames/{bgg_id}/forecast/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["boardgames_forecast_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/boardgames/declining/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["boardgames_declining_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/boardgames/rank-history/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["boardgames_rank_history_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/boardgames/trending/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["boardgames_trending_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/categories/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["categories_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/categories/{bgg_id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["categories_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/designers/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["designers_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/designers/{bgg_id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["designers_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/families/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["families_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/families/{bgg_id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["families_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/graphs/": {
         parameters: {
             query?: never;
             header?: never;
@@ -29,10 +204,20 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Read Games With Rank Changes
-         * @description Return a list of boardgames from the database, sorted by rank.
+         * @description Custom endpoints for graph data.
+         *
+         *     All actions are registered under the `/graphs/` prefix.
+         *
+         *     A serializer_class is provided so that DRF's Schema generator
+         *     includes the viewset in the generated OpenAPI document.  Individual
+         *     actions override it when they return a more specific structure.
+         *
+         *     We also implement a minimal ``list`` method so that the DRF
+         *     ``DefaultRouter`` will include ``/graphs/`` in the API root view.
+         *     Without a list or retrieve method the router considers the viewset
+         *     to have no top-level link and omits it from the index page.
          */
-        get: operations["read_games_with_rank_changes_boardgames_rank_history_get"];
+        get: operations["graphs_list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -41,75 +226,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/boardgames/volatile": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Read Games With Volatility */
-        get: operations["read_games_with_volatility_boardgames_volatile_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/boardgames/trending": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Read Trending Games */
-        get: operations["read_trending_games_boardgames_trending_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/boardgames/declining": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Read Declining Games */
-        get: operations["read_declining_games_boardgames_declining_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/boardgames/clusters": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Read Boardgame Clusters */
-        get: operations["read_boardgame_clusters_boardgames_clusters_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/boardgames/{bgg_id}": {
+    "/graphs/all/": {
         parameters: {
             query?: never;
             header?: never;
@@ -117,29 +234,20 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Read Game
-         * @description Read a single game for the database.
+         * @description Custom endpoints for graph data.
          *
-         *     Args:
-         *         bgg_id (int): ID.
-         *         start_date (datetime.date | None, optional): Start date for historic date.
-         *             Defaults to None.
-         *         end_date (datetime.date | None, optional): End date for historic date.
-         *             Defaults to None.
-         *         mode (Literal['auto', 'daily', 'weekly', 'yearly'], optional):
-         *             Mode for historic data. Defaults to "auto".
+         *     All actions are registered under the `/graphs/` prefix.
          *
-         *     Raises:
-         *         HTTPException: Exception if no game is found.
+         *     A serializer_class is provided so that DRF's Schema generator
+         *     includes the viewset in the generated OpenAPI document.  Individual
+         *     actions override it when they return a more specific structure.
          *
-         *     Returns:
-         *         BoardgameSingle: Boardgame.
-         *
-         *     Parameters
-         *     ----------
-         *     db_session
+         *     We also implement a minimal ``list`` method so that the DRF
+         *     ``DefaultRouter`` will include ``/graphs/`` in the API root view.
+         *     Without a list or retrieve method the router considers the viewset
+         *     to have no top-level link and omits it from the index page.
          */
-        get: operations["read_game_boardgames__bgg_id__get"];
+        get: operations["graphs_all_retrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -148,296 +256,37 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/boardgames/{bgg_id}/forecast": {
+    "/graphs/build-all/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Forecast */
-        get: operations["forecast_boardgames__bgg_id__forecast_get"];
+        get?: never;
         put?: never;
-        post?: never;
+        /**
+         * @description Custom endpoints for graph data.
+         *
+         *     All actions are registered under the `/graphs/` prefix.
+         *
+         *     A serializer_class is provided so that DRF's Schema generator
+         *     includes the viewset in the generated OpenAPI document.  Individual
+         *     actions override it when they return a more specific structure.
+         *
+         *     We also implement a minimal ``list`` method so that the DRF
+         *     ``DefaultRouter`` will include ``/graphs/`` in the API root view.
+         *     Without a list or retrieve method the router considers the viewset
+         *     to have no top-level link and omits it from the index page.
+         */
+        post: operations["graphs_build_all_create"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/boardgames/{bgg_id}/rank-history": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Rank History */
-        get: operations["rank_history_boardgames__bgg_id__rank_history_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/boardgames/{bgg_id}/statistics": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Game Statistics */
-        get: operations["game_statistics_boardgames__bgg_id__statistics_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/boardgames/{bgg_id}/similar": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Similar Games */
-        get: operations["similar_games_boardgames__bgg_id__similar_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/categories": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Read All Categories */
-        get: operations["read_all_categories_categories_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/categories/clusters": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Read Category Clusters */
-        get: operations["read_category_clusters_categories_clusters_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/categories/{bgg_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Read Category */
-        get: operations["read_category_categories__bgg_id__get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/designers": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Read All Designers */
-        get: operations["read_all_designers_designers_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/designers/clusters": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Read Designer Clusters */
-        get: operations["read_designer_clusters_designers_clusters_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/designers/{bgg_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Read Designer */
-        get: operations["read_designer_designers__bgg_id__get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/families": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Read All Families */
-        get: operations["read_all_families_families_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/families/clusters": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Read Family Clusters */
-        get: operations["read_family_clusters_families_clusters_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/families/{bgg_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Read Family */
-        get: operations["read_family_families__bgg_id__get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/mechanics": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Read All Mechanics */
-        get: operations["read_all_mechanics_mechanics_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/mechanics/clusters": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Read Mechanic Clusters */
-        get: operations["read_mechanic_clusters_mechanics_clusters_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/mechanics/{bgg_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Read Mechanic */
-        get: operations["read_mechanic_mechanics__bgg_id__get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/search": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Search */
-        get: operations["search_search_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/metrics": {
+    "/graphs/heterogeneous/": {
         parameters: {
             query?: never;
             header?: never;
@@ -445,10 +294,158 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Metrics
-         * @description Endpoint that serves Prometheus metrics.
+         * @description Custom endpoints for graph data.
+         *
+         *     All actions are registered under the `/graphs/` prefix.
+         *
+         *     A serializer_class is provided so that DRF's Schema generator
+         *     includes the viewset in the generated OpenAPI document.  Individual
+         *     actions override it when they return a more specific structure.
+         *
+         *     We also implement a minimal ``list`` method so that the DRF
+         *     ``DefaultRouter`` will include ``/graphs/`` in the API root view.
+         *     Without a list or retrieve method the router considers the viewset
+         *     to have no top-level link and omits it from the index page.
          */
-        get: operations["metrics_metrics_get"];
+        get: operations["graphs_heterogeneous_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/graphs/heterogeneous/build/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Custom endpoints for graph data.
+         *
+         *     All actions are registered under the `/graphs/` prefix.
+         *
+         *     A serializer_class is provided so that DRF's Schema generator
+         *     includes the viewset in the generated OpenAPI document.  Individual
+         *     actions override it when they return a more specific structure.
+         *
+         *     We also implement a minimal ``list`` method so that the DRF
+         *     ``DefaultRouter`` will include ``/graphs/`` in the API root view.
+         *     Without a list or retrieve method the router considers the viewset
+         *     to have no top-level link and omits it from the index page.
+         */
+        post: operations["graphs_heterogeneous_build_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/graphs/list-available/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Custom endpoints for graph data.
+         *
+         *     All actions are registered under the `/graphs/` prefix.
+         *
+         *     A serializer_class is provided so that DRF's Schema generator
+         *     includes the viewset in the generated OpenAPI document.  Individual
+         *     actions override it when they return a more specific structure.
+         *
+         *     We also implement a minimal ``list`` method so that the DRF
+         *     ``DefaultRouter`` will include ``/graphs/`` in the API root view.
+         *     Without a list or retrieve method the router considers the viewset
+         *     to have no top-level link and omits it from the index page.
+         */
+        get: operations["graphs_list_available_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/graphs/projected/{graph_type}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Custom endpoints for graph data.
+         *
+         *     All actions are registered under the `/graphs/` prefix.
+         *
+         *     A serializer_class is provided so that DRF's Schema generator
+         *     includes the viewset in the generated OpenAPI document.  Individual
+         *     actions override it when they return a more specific structure.
+         *
+         *     We also implement a minimal ``list`` method so that the DRF
+         *     ``DefaultRouter`` will include ``/graphs/`` in the API root view.
+         *     Without a list or retrieve method the router considers the viewset
+         *     to have no top-level link and omits it from the index page.
+         */
+        get: operations["graphs_projected_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/mechanics/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["mechanics_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/mechanics/{bgg_id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["mechanics_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/search/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["search_retrieve"];
         put?: never;
         post?: never;
         delete?: never;
@@ -461,286 +458,210 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        /** BoardgameInList */
-        BoardgameInList: {
-            /** Bgg Id */
+        AllGraphs: {
+            heterogeneous: components["schemas"]["BaseGraph"];
+            projected: {
+                [key: string]: components["schemas"]["BaseGraph"];
+            };
+        };
+        AvailableGraph: {
+            type: string;
+            description: string;
+        };
+        AvailableGraphsResponse: {
+            available_graphs: components["schemas"]["AvailableGraph"][];
+        };
+        /** @description Generic schema for a graph dictionary returned from the service. */
+        BaseGraph: {
+            nodes: {
+                [key: string]: unknown;
+            }[];
+            edges: {
+                [key: string]: unknown;
+            }[];
+        };
+        BoardgameDetail: {
+            readonly id: number;
             bgg_id: number;
-            /** Name */
-            name?: string | null;
-            /** Description */
-            description?: string | null;
-            /** Image Url */
-            image_url?: string | null;
-            /** Thumbnail Url */
-            thumbnail_url?: string | null;
-            /** Year Published */
-            year_published?: number | null;
-            /** Minplayers */
-            minplayers?: number | null;
-            /** Maxplayers */
-            maxplayers?: number | null;
-            /** Playingtime */
-            playingtime?: number | null;
-            /** Minplaytime */
-            minplaytime?: number | null;
-            /** Maxplaytime */
-            maxplaytime?: number | null;
-            /** Bgg Rank */
-            bgg_rank: number;
-            /** Bgg Geek Rating */
+            bgg_rank?: number | null;
+            name?: string;
+            /** Format: double */
             bgg_geek_rating?: number | null;
-            /** Bgg Average Rating */
+            /** Format: double */
             bgg_average_rating?: number | null;
-            /** Bgg Rank Trend */
+            /** Format: double */
             bgg_rank_trend?: number | null;
-            /** Bgg Geek Rating Trend */
-            bgg_geek_rating_trend?: number | null;
-            /** Bgg Average Rating Trend */
-            bgg_average_rating_trend?: number | null;
-            /** Mean Trend */
+            /** Format: double */
             mean_trend?: number | null;
-            /** Bgg Rank Change */
-            bgg_rank_change?: number | null;
-            /** Bgg Geek Rating Change */
-            bgg_geek_rating_change?: number | null;
-            /** Bgg Average Rating Change */
-            bgg_average_rating_change?: number | null;
-        };
-        /** BoardgameSingle */
-        BoardgameSingle: {
-            /** Bgg Id */
-            bgg_id: number;
-            /** Name */
-            name?: string | null;
-            /** Description */
-            description?: string | null;
-            /** Image Url */
-            image_url?: string | null;
-            /** Thumbnail Url */
-            thumbnail_url?: string | null;
-            /** Year Published */
+            readonly categories: components["schemas"]["CategoryList"][];
+            readonly designers: components["schemas"]["DesignerList"][];
+            readonly families: components["schemas"]["FamilyList"][];
+            readonly mechanics: components["schemas"]["MechanicList"][];
+            /** Format: uri */
+            thumbnail_url?: string;
             year_published?: number | null;
-            /** Minplayers */
+            description?: string;
+            /** Format: uri */
+            image_url?: string;
             minplayers?: number | null;
-            /** Maxplayers */
             maxplayers?: number | null;
-            /** Playingtime */
             playingtime?: number | null;
-            /** Minplaytime */
             minplaytime?: number | null;
-            /** Maxplaytime */
             maxplaytime?: number | null;
-            /** Bgg Rank */
-            bgg_rank: number;
-            /** Bgg Geek Rating */
+            readonly bgg_rank_history: components["schemas"]["RankHistory"][];
+        };
+        BoardgameList: {
+            readonly id: number;
+            bgg_id: number;
+            bgg_rank?: number | null;
+            name?: string;
+            /** Format: double */
             bgg_geek_rating?: number | null;
-            /** Bgg Average Rating */
+            /** Format: double */
             bgg_average_rating?: number | null;
-            /** Bgg Rank Trend */
+            /** Format: double */
             bgg_rank_trend?: number | null;
-            /** Bgg Geek Rating Trend */
-            bgg_geek_rating_trend?: number | null;
-            /** Bgg Average Rating Trend */
-            bgg_average_rating_trend?: number | null;
-            /** Mean Trend */
+            /** Format: double */
             mean_trend?: number | null;
-            /**
-             * Categories
-             * @default []
-             */
-            categories: components["schemas"]["Category"][];
-            /**
-             * Families
-             * @default []
-             */
-            families: components["schemas"]["Family"][];
-            /**
-             * Designers
-             * @default []
-             */
-            designers: components["schemas"]["Designer"][];
-            /**
-             * Mechanics
-             * @default []
-             */
-            mechanics: components["schemas"]["Mechanic"][];
-            /**
-             * Bgg Rank History
-             * @default []
-             */
-            bgg_rank_history: components["schemas"]["RankHistory"][];
+            readonly categories: components["schemas"]["CategoryList"][];
+            readonly designers: components["schemas"]["DesignerList"][];
+            readonly families: components["schemas"]["FamilyList"][];
+            readonly mechanics: components["schemas"]["MechanicList"][];
+            /** Format: uri */
+            thumbnail_url?: string;
+            year_published?: number | null;
         };
-        /** Category */
-        Category: {
-            /** Name */
+        /**
+         * @description Inherits from the List serializer but adds the annotated
+         *     historical and difference fields.
+         */
+        BoardgameRankHistory: {
+            readonly id: number;
+            bgg_id: number;
+            bgg_rank?: number | null;
+            name?: string;
+            /** Format: double */
+            bgg_geek_rating?: number | null;
+            /** Format: double */
+            bgg_average_rating?: number | null;
+            /** Format: double */
+            bgg_rank_trend?: number | null;
+            /** Format: double */
+            mean_trend?: number | null;
+            readonly categories: components["schemas"]["CategoryList"][];
+            readonly designers: components["schemas"]["DesignerList"][];
+            readonly families: components["schemas"]["FamilyList"][];
+            readonly mechanics: components["schemas"]["MechanicList"][];
+            /** Format: uri */
+            thumbnail_url?: string;
+            year_published?: number | null;
+            readonly past_rank: number;
+            /** Format: double */
+            readonly past_geek_rating: number;
+            /** Format: double */
+            readonly past_avg_rating: number;
+            readonly bgg_rank_change: number;
+            /** Format: double */
+            readonly bgg_geek_rating_change: number;
+            /** Format: double */
+            readonly bgg_average_rating_change: number;
+        };
+        BoardgameSimple: {
+            readonly id: number;
+            name?: string;
+            bgg_id: number;
+            bgg_rank?: number | null;
+        };
+        BuildAllGraphsResult: {
+            status: string;
+            graphs_built: {
+                [key: string]: unknown;
+            };
+        };
+        BuildGraphResult: {
+            status: string;
+            graph_statistics: {
+                [key: string]: unknown;
+            };
+        };
+        CategoryDetail: {
+            readonly id: number;
             name: string;
-            /** Bgg Id */
             bgg_id: number;
+            type?: string;
+            readonly boardgames: components["schemas"]["BoardgameSimple"][];
         };
-        /** CategoryWithBoardgames */
-        CategoryWithBoardgames: {
-            /** Name */
+        CategoryList: {
+            readonly id: number;
             name: string;
-            /** Bgg Id */
             bgg_id: number;
-            /** Boardgames */
-            boardgames: components["schemas"]["BoardgameInList"][];
+            type?: string;
         };
-        /** Designer */
-        Designer: {
-            /** Name */
+        DesignerDetail: {
+            readonly id: number;
             name: string;
-            /** Bgg Id */
             bgg_id: number;
+            type?: string;
+            readonly boardgames: components["schemas"]["BoardgameSimple"][];
         };
-        /** DesignerWithBoardgames */
-        DesignerWithBoardgames: {
-            /** Name */
+        DesignerList: {
+            readonly id: number;
             name: string;
-            /** Bgg Id */
             bgg_id: number;
-            /** Boardgames */
-            boardgames: components["schemas"]["BoardgameInList"][];
+            type?: string;
         };
-        /** Edge */
-        Edge: {
-            /** Id */
-            id: string;
-            /** Label */
-            label: string;
-            /** Source */
-            source: string;
-            /** Target */
-            target: string;
-            /** Size */
-            size: number;
-        };
-        /** Family */
-        Family: {
-            /** Name */
+        FamilyDetail: {
+            readonly id: number;
             name: string;
-            /** Bgg Id */
             bgg_id: number;
+            type?: string;
+            readonly boardgames: components["schemas"]["BoardgameSimple"][];
         };
-        /** FamilyWithBoardgames */
-        FamilyWithBoardgames: {
-            /** Name */
+        FamilyList: {
+            readonly id: number;
             name: string;
-            /** Bgg Id */
             bgg_id: number;
-            /** Boardgames */
-            boardgames: components["schemas"]["BoardgameInList"][];
+            type?: string;
         };
-        /** ForecastData */
-        ForecastData: {
-            /** Bgg Id */
-            bgg_id: number;
-            /** Prediction */
-            prediction: components["schemas"]["Prediction"][];
-        };
-        /** HTTPValidationError */
-        HTTPValidationError: {
-            /** Detail */
-            detail?: components["schemas"]["ValidationError"][];
-        };
-        /** Mechanic */
-        Mechanic: {
-            /** Name */
+        MechanicDetail: {
+            readonly id: number;
             name: string;
-            /** Bgg Id */
             bgg_id: number;
+            type?: string;
+            readonly boardgames: components["schemas"]["BoardgameSimple"][];
         };
-        /** MechanicWithBoardgames */
-        MechanicWithBoardgames: {
-            /** Name */
+        MechanicList: {
+            readonly id: number;
             name: string;
-            /** Bgg Id */
             bgg_id: number;
-            /** Boardgames */
-            boardgames: components["schemas"]["BoardgameInList"][];
+            type?: string;
         };
-        /** Network */
-        Network: {
-            /** Nodes */
-            nodes: components["schemas"]["Node"][];
-            /** Edges */
-            edges: components["schemas"]["Edge"][];
-        };
-        /** Node */
-        Node: {
-            /** Id */
-            id: string;
-            /** Label */
-            label: string;
-            /** X */
-            x: number;
-            /** Y */
-            y: number;
-            /** Size */
-            size: number;
-            /** Cluster */
-            cluster: number;
-        };
-        /** Prediction */
+        PaginatedBoardgameListList: components["schemas"]["BoardgameList"][];
+        PaginatedCategoryListList: components["schemas"]["CategoryList"][];
+        PaginatedDesignerListList: components["schemas"]["DesignerList"][];
+        PaginatedFamilyListList: components["schemas"]["FamilyList"][];
+        PaginatedMechanicListList: components["schemas"]["MechanicList"][];
         Prediction: {
-            /**
-             * Date
-             * Format: date
-             */
+            /** Format: date-time */
             date: string;
-            /** Bgg Rank */
             bgg_rank: number;
-            /** Bgg Rank Confidence Interval */
-            bgg_rank_confidence_interval: [
-                number,
-                number
-            ];
-            /** Bgg Average Rating */
+            bgg_rank_confidence_interval: number[];
+            /** Format: double */
             bgg_average_rating: number;
-            /** Bgg Average Rating Confidence Interval */
-            bgg_average_rating_confidence_interval: [
-                number,
-                number
-            ];
-            /** Bgg Geek Rating */
+            bgg_average_rating_confidence_interval: number[];
+            /** Format: double */
             bgg_geek_rating: number;
-            /** Bgg Geek Rating Confidence Interval */
-            bgg_geek_rating_confidence_interval: [
-                number,
-                number
-            ];
+            bgg_geek_rating_confidence_interval: number[];
         };
-        /** RankHistory */
         RankHistory: {
-            /**
-             * Date
-             * Format: date
-             */
+            readonly id: number;
+            /** Format: date */
             date: string;
-            /** Bgg Rank */
-            bgg_rank: number | null;
-            /** Bgg Geek Rating */
-            bgg_geek_rating: number | null;
-            /** Bgg Average Rating */
-            bgg_average_rating: number | null;
-        };
-        /** SearchResult */
-        SearchResult: {
-            /** Bgg Id */
-            bgg_id: number;
-            /** Name */
-            name: string;
-            /** Type */
-            type: string;
-        };
-        /** ValidationError */
-        ValidationError: {
-            /** Location */
-            loc: (string | number)[];
-            /** Message */
-            msg: string;
-            /** Error Type */
-            type: string;
+            bgg_rank?: number | null;
+            /** Format: double */
+            bgg_geek_rating?: number | null;
+            /** Format: double */
+            bgg_average_rating?: number | null;
         };
     };
     responses: never;
@@ -751,41 +672,11 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    read_all_games_boardgames_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    read_games_with_rank_changes_boardgames_rank_history_get: {
+    boardgames_list: {
         parameters: {
             query?: {
-                compare_to?: string | null;
+                /** @description A page number within the paginated result set. */
                 page?: number;
-                per_page?: number;
             };
             header?: never;
             path?: never;
@@ -793,150 +684,19 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BoardgameInList"][];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
+                    "application/json": components["schemas"]["PaginatedBoardgameListList"];
                 };
             };
         };
     };
-    read_games_with_volatility_boardgames_volatile_get: {
+    boardgames_retrieve: {
         parameters: {
             query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    read_trending_games_boardgames_trending_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BoardgameInList"][];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    read_declining_games_boardgames_declining_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BoardgameInList"][];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    read_boardgame_clusters_boardgames_clusters_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Network"];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    read_game_boardgames__bgg_id__get: {
-        parameters: {
-            query?: {
-                start_date?: string | null;
-                end_date?: string | null;
-                mode?: "auto" | "daily" | "weekly" | "yearly";
-            };
             header?: never;
             path: {
                 bgg_id: number;
@@ -945,39 +705,19 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BoardgameSingle"];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
+                    "application/json": components["schemas"]["BoardgameDetail"];
                 };
             };
         };
     };
-    forecast_boardgames__bgg_id__forecast_get: {
+    boardgames_forecast_retrieve: {
         parameters: {
-            query?: {
-                start_date?: string | null;
-                end_date?: string | null;
-            };
+            query?: never;
             header?: never;
             path: {
                 bgg_id: number;
@@ -986,34 +726,17 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ForecastData"];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
+                    "application/json": components["schemas"]["Prediction"];
                 };
             };
         };
     };
-    rank_history_boardgames__bgg_id__rank_history_get: {
+    boardgames_declining_retrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -1022,27 +745,17 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
+                    "application/json": components["schemas"]["BoardgameList"];
                 };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
             };
         };
     };
-    game_statistics_boardgames__bgg_id__statistics_get: {
+    boardgames_rank_history_retrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -1051,27 +764,17 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
+                    "application/json": components["schemas"]["BoardgameRankHistory"];
                 };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
             };
         };
     };
-    similar_games_boardgames__bgg_id__similar_get: {
+    boardgames_trending_retrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -1080,31 +783,21 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
+                    "application/json": components["schemas"]["BoardgameList"];
                 };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
             };
         };
     };
-    read_all_categories_categories_get: {
+    categories_list: {
         parameters: {
             query?: {
+                /** @description A page number within the paginated result set. */
                 page?: number;
-                per_page?: number;
             };
             header?: never;
             path?: never;
@@ -1112,61 +805,17 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Category"][];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
+                    "application/json": components["schemas"]["PaginatedCategoryListList"];
                 };
             };
         };
     };
-    read_category_clusters_categories_clusters_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Network"];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    read_category_categories__bgg_id__get: {
+    categories_retrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -1177,38 +826,21 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CategoryWithBoardgames"];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
+                    "application/json": components["schemas"]["CategoryDetail"];
                 };
             };
         };
     };
-    read_all_designers_designers_get: {
+    designers_list: {
         parameters: {
             query?: {
+                /** @description A page number within the paginated result set. */
                 page?: number;
-                per_page?: number;
             };
             header?: never;
             path?: never;
@@ -1216,61 +848,17 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Designer"][];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
+                    "application/json": components["schemas"]["PaginatedDesignerListList"];
                 };
             };
         };
     };
-    read_designer_clusters_designers_clusters_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Network"];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    read_designer_designers__bgg_id__get: {
+    designers_retrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -1281,38 +869,21 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DesignerWithBoardgames"];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
+                    "application/json": components["schemas"]["DesignerDetail"];
                 };
             };
         };
     };
-    read_all_families_families_get: {
+    families_list: {
         parameters: {
             query?: {
+                /** @description A page number within the paginated result set. */
                 page?: number;
-                per_page?: number;
             };
             header?: never;
             path?: never;
@@ -1320,61 +891,17 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Family"][];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
+                    "application/json": components["schemas"]["PaginatedFamilyListList"];
                 };
             };
         };
     };
-    read_family_clusters_families_clusters_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Network"];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    read_family_families__bgg_id__get: {
+    families_retrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -1385,38 +912,168 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["FamilyWithBoardgames"];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
+                    "application/json": components["schemas"]["FamilyDetail"];
                 };
             };
         };
     };
-    read_all_mechanics_mechanics_get: {
+    graphs_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseGraph"][];
+                };
+            };
+        };
+    };
+    graphs_all_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AllGraphs"];
+                };
+            };
+        };
+    };
+    graphs_build_all_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BuildAllGraphsResult"];
+                "application/x-www-form-urlencoded": components["schemas"]["BuildAllGraphsResult"];
+                "multipart/form-data": components["schemas"]["BuildAllGraphsResult"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BuildAllGraphsResult"];
+                };
+            };
+        };
+    };
+    graphs_heterogeneous_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseGraph"];
+                };
+            };
+        };
+    };
+    graphs_heterogeneous_build_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BuildGraphResult"];
+                "application/x-www-form-urlencoded": components["schemas"]["BuildGraphResult"];
+                "multipart/form-data": components["schemas"]["BuildGraphResult"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BuildGraphResult"];
+                };
+            };
+        };
+    };
+    graphs_list_available_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AvailableGraphsResponse"];
+                };
+            };
+        };
+    };
+    graphs_projected_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                graph_type: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseGraph"];
+                };
+            };
+        };
+    };
+    mechanics_list: {
         parameters: {
             query?: {
+                /** @description A page number within the paginated result set. */
                 page?: number;
-                per_page?: number;
             };
             header?: never;
             path?: never;
@@ -1424,61 +1081,17 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Mechanic"][];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
+                    "application/json": components["schemas"]["PaginatedMechanicListList"];
                 };
             };
         };
     };
-    read_mechanic_clusters_mechanics_clusters_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Network"];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    read_mechanic_mechanics__bgg_id__get: {
+    mechanics_retrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -1489,73 +1102,17 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful Response */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["MechanicWithBoardgames"];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
+                    "application/json": components["schemas"]["MechanicDetail"];
                 };
             };
         };
     };
-    search_search_get: {
-        parameters: {
-            query: {
-                query: string;
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SearchResult"][];
-                };
-            };
-            /** @description Not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    metrics_metrics_get: {
+    search_retrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -1564,14 +1121,12 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful Response */
+            /** @description No response body */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/json": unknown;
-                };
+                content?: never;
             };
         };
     };

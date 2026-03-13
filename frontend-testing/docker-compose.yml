@@ -1,3 +1,5 @@
+name: saboga-frontend
+
 services:
   saboga-frontend:
     build:

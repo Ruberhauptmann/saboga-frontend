@@ -1,7 +1,7 @@
 import type { components } from "../apischema";
 import { Link, useLoaderData } from "react-router-dom";
 
-type Mechanic = components["schemas"]["Mechanic"];
+type Mechanic = components["schemas"]["MechanicList"];
 
 function BrowseMechanics() {
   const mechanics = useLoaderData() as Mechanic[];

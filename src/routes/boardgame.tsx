@@ -12,7 +12,7 @@ import Datepicker, { DateRangeType } from "react-tailwindcss-datepicker";
 import { format } from "date-fns";
 
 type BoardgameWithHistoricalData =
-  components["schemas"]["BoardgameSingle"];
+  components["schemas"]["BoardgameDetail"];
 
 function Boardgame() {
   const boardgame = useLoaderData() as BoardgameWithHistoricalData;

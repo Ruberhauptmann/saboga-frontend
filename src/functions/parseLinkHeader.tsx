@@ -21,9 +21,9 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-function parseLinkHeader(header: string): Map<string, Map<string, string>> {
-  if (header.length === 0) {
-    throw new Error("input must not be of zero length");
+function parseLinkHeader(header: string | null): Map<string, Map<string, string>> {
+  if (header === null || header.length === 0) {
+    return new Map();
   }
 
   const parts = header.split(",");

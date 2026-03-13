@@ -1,7 +1,7 @@
 import type { components } from "../apischema";
 import { Link, useLoaderData } from "react-router-dom";
 
-type Category = components["schemas"]["Category"];
+type Category = components["schemas"]["CategoryList"];
 
 function BrowseCategories() {
   const categories = useLoaderData() as Category[];

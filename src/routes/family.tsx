@@ -4,7 +4,7 @@ import {
   useLoaderData,
 } from "react-router-dom";
 
-type Family = components["schemas"]["FamilyWithBoardgames"];
+type Family = components["schemas"]["FamilyDetail"];
 
 function Family() {
   const family = useLoaderData() as Family;

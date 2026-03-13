@@ -5,7 +5,7 @@ import { useState } from "react";
 import { format, subMonths, subYears } from "date-fns";
 import { components } from "../apischema";
 
-type BoardgameInList= components["schemas"]["BoardgameInList"];
+type BoardgameInList= components["schemas"]["BoardgameRankHistory"];
 
 function BrowseBoardgames() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -102,30 +102,21 @@ function BrowseBoardgames() {
       </fieldset>
 
       <div className="flex justify-end">
-        <NavLink
-          className="pr-1 link"
-          to={`/browse/boardgame/page/${links.get("first")?.get("page")}`}
-        >
-          {links.get("first")?.get("page")}
-        </NavLink>
-        <NavLink
-          className="pr-1 link"
-          to={`/browse/boardgame/page/${links.get("prev")?.get("page")}`}
-        >
-          {links.get("prev")?.get("rel")}
-        </NavLink>
-        <NavLink
-          className="link"
-          to={`/browse/boardgame/page/${links.get("next")?.get("page")}`}
-        >
-          {links.get("next")?.get("rel")}
-        </NavLink>
-        <NavLink
-          className="pl-1 link"
-          to={`/browse/boardgame/page/${links.get("last")?.get("page")}`}
-        >
-          {links.get("last")?.get("page")}
-        </NavLink>
+{["first", "prev", "next", "last"].map((key) => {
+  const link = links.get(key);
+  if (!link) return null; // Skip if the link doesn't exist
+
+  return (
+    <NavLink
+      key={key}
+      className="px-1 link"
+      to={`/browse/boardgame/page/${link.get("page")}`}
+    >
+      {/* Dynamic label logic: use 'page' for first/last, 'rel' for prev/next */}
+      {["first", "last"].includes(key) ? link.get("page") : link.get("rel")}
+    </NavLink>
+  );
+})}
       </div>
 
       <BoardgameTable boardgames={boardgames} />
