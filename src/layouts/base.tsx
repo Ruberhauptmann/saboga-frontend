@@ -8,9 +8,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { search } from "../functions/apiService";
-import type { components } from "../apischema";
-
-type SearchResult = components["schemas"]["SearchResult"];
+import { SearchResult } from "../types/search_result";
 
 type NavSubItem = { label: string; to: string };
 type NavItem = { label: string; to?: string; submenu?: NavSubItem[] };
@@ -285,13 +283,13 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
             {suggestionsVisible && (
               <ul className="absolute z-50 bg-base-100 shadow-md mt-1 w-full rounded-box max-h-60 overflow-y-auto">
                 {results.map((result) => (
-                  <li key={result.bgg_id} className="hover:bg-base-200">
+                  <li key={result.data.bgg_id} className="hover:bg-base-200">
                     <Link
-                      to={`/${result.type}/${result.bgg_id}`}
+                      to={`/${result.type}/${result.data.bgg_id}`}
                       onClick={() => setShowResults(false)}
                       className="block p-2"
                     >
-                      {result.name}
+                      {result.data.name}
                     </Link>
                   </li>
                 ))}

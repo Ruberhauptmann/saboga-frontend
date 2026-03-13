@@ -1,5 +1,4 @@
 import { Link, useLoaderData } from "react-router-dom";
-import type { components } from "../apischema";
 import { SearchResult } from "../types/search_result";
 
 export default function SearchResults() {
